@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="NK3-hw-0O6">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <scenes>
+        <!--Automaton View Controller-->
+        <scene sceneID="OU4-qN-1ej">
+            <objects>
+                <viewController storyboardIdentifier="AutomatonViewController" id="NK3-hw-0O6" customClass="AutomatonViewController" customModule="RxAutomatonDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2rh-mj-wuI"/>
+                        <viewControllerLayoutGuide type="bottom" id="dXE-iZ-hMP"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Hul-5M-zkm">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="alX-Sm-j4j">
+                                <rect key="frame" x="127" y="350" width="120" height="48"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="836-aq-hSI"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="eE9-oM-6bp"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="Login">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gNc-Ez-DrM">
+                                <rect key="frame" x="127" y="418" width="120" height="48"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="WUl-Q7-c7s"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="lrv-Bf-hJ1"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="Logout">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="olf-mX-imm">
+                                <rect key="frame" x="120" y="486" width="135" height="48"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="Irx-O2-Fla"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="gyV-IF-j8u"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="ForceLogout">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Send Input)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SUJ-ji-PAA">
+                                <rect key="frame" x="73.5" y="260" width="227" height="51"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="42"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="automaton" translatesAutoresizingMaskIntoConstraints="NO" id="7Lm-dB-A1E">
+                                <rect key="frame" x="0.0" y="40" width="375" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="IcQ-xT-LjU"/>
+                                    <constraint firstAttribute="width" constant="375" id="bDF-jE-9lQ"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="SUJ-ji-PAA" firstAttribute="top" secondItem="7Lm-dB-A1E" secondAttribute="bottom" constant="20" id="3FA-12-Jdq"/>
+                            <constraint firstItem="7Lm-dB-A1E" firstAttribute="top" secondItem="2rh-mj-wuI" secondAttribute="bottom" constant="20" id="IGz-SH-H5F"/>
+                            <constraint firstItem="gNc-Ez-DrM" firstAttribute="top" secondItem="alX-Sm-j4j" secondAttribute="bottom" constant="20" id="MU0-Ez-e5c"/>
+                            <constraint firstItem="SUJ-ji-PAA" firstAttribute="centerX" secondItem="alX-Sm-j4j" secondAttribute="centerX" id="PAN-pd-PRG"/>
+                            <constraint firstItem="gNc-Ez-DrM" firstAttribute="centerX" secondItem="alX-Sm-j4j" secondAttribute="centerX" id="cnf-B6-PCQ"/>
+                            <constraint firstItem="alX-Sm-j4j" firstAttribute="top" secondItem="SUJ-ji-PAA" secondAttribute="bottom" constant="40" id="h91-Cf-iu7"/>
+                            <constraint firstItem="olf-mX-imm" firstAttribute="centerX" secondItem="gNc-Ez-DrM" secondAttribute="centerX" id="hfG-VO-RSr"/>
+                            <constraint firstItem="olf-mX-imm" firstAttribute="top" secondItem="gNc-Ez-DrM" secondAttribute="bottom" constant="20" id="l8d-Kl-uxP"/>
+                            <constraint firstItem="7Lm-dB-A1E" firstAttribute="centerX" secondItem="Hul-5M-zkm" secondAttribute="centerX" id="qoS-kM-dKh"/>
+                            <constraint firstItem="alX-Sm-j4j" firstAttribute="centerX" secondItem="Hul-5M-zkm" secondAttribute="centerX" id="wlu-6G-b51"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="diagramView" destination="7Lm-dB-A1E" id="aaF-iW-BYy"/>
+                        <outlet property="forceLogoutButton" destination="olf-mX-imm" id="OMQ-JJ-J4Q"/>
+                        <outlet property="label" destination="SUJ-ji-PAA" id="gNk-FN-5DY"/>
+                        <outlet property="loginButton" destination="alX-Sm-j4j" id="VoT-l9-v2y"/>
+                        <outlet property="logoutButton" destination="gNc-Ez-DrM" id="I6g-75-7en"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GEl-Cj-lNo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="417.5" y="43.5"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="automaton" width="448" height="240"/>
+    </resources>
+</document>

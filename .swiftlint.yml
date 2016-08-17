@@ -1,0 +1,35 @@
+#
+# NOTE:
+# To fix `trailing_whitespace` error,
+# go to Xcode Preferences -> Text Editing -> turn on both "Automatically trim trailing whitespace" and "Including whitespace-only lines".
+#
+
+disabled_rules:
+  - line_length
+  - function_body_length
+  - type_body_length
+  - file_length
+  - cyclomatic_complexity
+
+  - force_cast
+
+  - opening_brace         # prefer Allman-Style
+  - closing_brace         # allow `}\n)`
+  - statement_position    # allow `if {}\nelse {}`
+  - type_name             # allow "_" prefix name
+  - variable_name         # allow "_" prefix name
+  - todo
+  - valid_docs
+
+opt_in_rules:
+  - empty_count  # local variable name `count` is frequently used
+
+included:
+ - Sources
+ - Tests
+
+excluded:
+  - Carthage
+  - Packages
+
+reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)

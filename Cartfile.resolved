@@ -1,0 +1,5 @@
+github "Quick/Nimble" "v4.1.0"
+github "shu223/Pulsator" "0.1.1"
+github "Quick/Quick" "v0.9.3"
+github "ReactiveX/RxSwift" "2.6.0"
+github "mrackwitz/xcconfigs" "3.0"
