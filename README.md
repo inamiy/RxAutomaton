@@ -18,33 +18,33 @@ To make a state transition diagram like above _with additional effects_, follow 
 ```swift
 // 1. Define `State`s and `Input`s.
 enum State {
-    case LoggedOut, LoggingIn, LoggedIn, LoggingOut
+    case loggedOut, loggingIn, loggedIn, loggingOut
 }
 
 enum Input {
-    case Login, LoginOK, Logout, LogoutOK
-    case ForceLogout
+    case login, loginOK, logout, logoutOK
+    case forceLogout
 }
 
 // Additional effects (`Observable`s) while state-transitioning.
 // (NOTE: Use `Observable.empty()` for no effect)
-let loginOKProducer = /* show UI, setup DB, request APIs, ..., and send `Input.LoginOK` */
-let logoutOKProducer = /* show UI, clear cache, cancel APIs, ..., and send `Input.LogoutOK` */
-let forceLogoutOKProducer = /* do something more special, ..., and send `Input.LogoutOK` */
+let loginOKProducer = /* show UI, setup DB, request APIs, ..., and send `Input.loginOK` */
+let logoutOKProducer = /* show UI, clear cache, cancel APIs, ..., and send `Input.logoutOK` */
+let forcelogoutOKProducer = /* do something more special, ..., and send `Input.logoutOK` */
 
-let canForceLogout: State -> Bool = [.LoggingIn, .LoggedIn].contains
+let canForceLogout: State -> Bool = [.loggingIn, .loggedIn].contains
 
 // 2. Setup state-transition mappings.
 let mappings: [Automaton<State, Input>.NextMapping] = [
 
   /*  Input   |   fromState => toState     |      Effect       */
   /* ----------------------------------------------------------*/
-    .Login    | .LoggedOut  => .LoggingIn  | loginOKProducer,
-    .LoginOK  | .LoggingIn  => .LoggedIn   | .empty(),
-    .Logout   | .LoggedIn   => .LoggingOut | logoutOKProducer,
-    .LogoutOK | .LoggingOut => .LoggedOut  | .empty(),
+    .login    | .loggedOut  => .loggingIn  | loginOKProducer,
+    .loginOK  | .loggingIn  => .loggedIn   | .empty(),
+    .logout   | .loggedIn   => .loggingOut | logoutOKProducer,
+    .logoutOK | .loggingOut => .loggedOut  | .empty(),
 
-    .ForceLogout | canForceLogout => .LoggingOut | forceLogoutOKProducer
+    .forceLogout | canForceLogout => .loggingOut | forceLogoutOKProducer
 ]
 
 // 3. Prepare input pipe for sending `Input` to `Automaton`.
@@ -52,21 +52,21 @@ let (inputSignal, inputObserver) = Observable<Input>.pipe()
 
 // 4. Setup `Automaton`.
 let automaton = Automaton(
-    state: .LoggedOut,
+    state: .loggedOut,
     input: inputSignal,
     mapping: reduce(mappings),  // combine mappings using `reduce` helper
-    strategy: .Latest   // NOTE: `.Latest` cancels previous running effect
+    strategy: .latest   // NOTE: `.latest` cancels previous running effect
 )
 
-// Observe state-transition replies (`.Success` or `.Failure`).
-automaton.replies.subscribeNext { reply in
+// Observe state-transition replies (`.success` or `.failure`).
+automaton.replies.subscribe(next: { reply in
     print("received reply = \(reply)")
-}
+})
 
 // Observe current state changes.
-automaton.state.asObservable().subscribeNext { state in
+automaton.state.asObservable().subscribe(next: { state in
     print("current state = \(state)")
-}
+})
 ```
 
 And let's test!
@@ -74,25 +74,25 @@ And let's test!
 ```swift
 let send = inputObserver.onNext
 
-expect(automaton.state.value) == .LoggedIn    // already logged in
-send(Input.Logout)
-expect(automaton.state.value) == .LoggingOut  // logging out...
-// `logoutOKProducer` will automatically send `Input.LogoutOK` later
-// and transit to `State.LoggedOut`.
+expect(automaton.state.value) == .loggedIn    // already logged in
+send(Input.logout)
+expect(automaton.state.value) == .loggingOut  // logging out...
+// `logoutOKProducer` will automatically send `Input.logoutOK` later
+// and transit to `State.loggedOut`.
 
-expect(automaton.state.value) == .LoggedOut   // already logged out
-send(Input.Login)
-expect(automaton.state.value) == .LoggingIn   // logging in...
-// `loginOKProducer` will automatically send `Input.LoginOK` later
-// and transit to `State.LoggedIn`.
+expect(automaton.state.value) == .loggedOut   // already logged out
+send(Input.login)
+expect(automaton.state.value) == .loggingIn   // logging in...
+// `loginOKProducer` will automatically send `Input.loginOK` later
+// and transit to `State.loggedIn`.
 
 // 👨🏽 < But wait, there's more!
-// Let's send `Input.ForceLogout` immediately after `State.LoggingIn`.
+// Let's send `Input.forceLogout` immediately after `State.loggingIn`.
 
-send(Input.ForceLogout)                       // 💥💣💥
-expect(automaton.state.value) == .LoggingOut  // logging out...
-// `forceLogoutOKProducer` will automatically send `Input.LogoutOK` later
-// and transit to `State.LoggedOut`.
+send(Input.forceLogout)                       // 💥💣💥
+expect(automaton.state.value) == .loggingOut  // logging out...
+// `forcelogoutOKProducer` will automatically send `Input.logoutOK` later
+// and transit to `State.loggedOut`.
 ```
 
 ## License
