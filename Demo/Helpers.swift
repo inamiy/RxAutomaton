@@ -10,12 +10,6 @@ import QuartzCore
 import RxSwift
 import RxCocoa
 
-func logDeinit(object: AnyObject)
-{
-    let addr = String(format: "%p", unsafeAddressOf(object))
-    print("\n", "[deinit] \(object) \(addr)", "\n")
-}
-
 // MARK: CoreAnimation
 
 extension CALayer
@@ -28,7 +22,7 @@ extension CALayer
 
     public var rx_hidden: AnyObserver<Bool> {
         return UIBindingObserver(UIElement: self) { layer, value in
-            layer.hidden = value
+            layer.isHidden = value
         }.asObserver()
     }
 

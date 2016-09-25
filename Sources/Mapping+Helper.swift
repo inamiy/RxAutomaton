@@ -8,10 +8,10 @@
 
 import RxSwift
 
-/// "From-" and "to-" states represented as `.State1 => .State2` or `anyState => .State3`.
+/// "From-" and "to-" states represented as `.state1 => .state2` or `anyState => .state3`.
 public struct Transition<State>
 {
-    public let fromState: State -> Bool
+    public let fromState: (State) -> Bool
     public let toState: State
 }
 
@@ -19,9 +19,13 @@ public struct Transition<State>
 
 // MARK: `=>` (Transition constructor)
 
-infix operator => { associativity left precedence 150 } // higher than `|` (precedence 140)
+precedencegroup TransitionPrecedence {
+    associativity: left
+    higherThan: AdditionPrecedence
+}
+infix operator => : TransitionPrecedence    // higher than `|`
 
-public func => <State>(left: State -> Bool, right: State) -> Transition<State>
+public func => <State>(left: @escaping (State) -> Bool, right: State) -> Transition<State>
 {
     return Transition(fromState: left, toState: right)
 }
@@ -35,7 +39,7 @@ public func => <State: Equatable>(left: State, right: State) -> Transition<State
 
 //infix operator | { associativity left precedence 140 }   // Comment-Out: already built-in
 
-public func | <State, Input>(inputFunc: Input -> Bool, transition: Transition<State>) -> Automaton<State, Input>.Mapping
+public func | <State, Input>(inputFunc: @escaping (Input) -> Bool, transition: Transition<State>) -> Automaton<State, Input>.Mapping
 {
     return { fromState, input in
         if inputFunc(input) && transition.fromState(fromState) {
@@ -54,7 +58,7 @@ public func | <State, Input: Equatable>(input: Input, transition: Transition<Sta
 
 // MARK: `|` (Automaton.NextMapping constructor)
 
-public func | <State, Input>(mapping: Automaton<State, Input>.Mapping, nextInputProducer: Observable<Input>) -> Automaton<State, Input>.NextMapping
+public func | <State, Input>(mapping: @escaping Automaton<State, Input>.Mapping, nextInputProducer: Observable<Input>) -> Automaton<State, Input>.NextMapping
 {
     return { fromState, input in
         if let toState = mapping(fromState, input) {
@@ -69,15 +73,16 @@ public func | <State, Input>(mapping: Automaton<State, Input>.Mapping, nextInput
 // MARK: Functions
 
 /// Helper for "any state" or "any input" mappings, e.g.
-/// - `let mapping = .Input0 | any => .State1`
-/// - `let mapping = any | .State1 => .State2`
+/// - `let mapping = .input0 | any => .state1`
+/// - `let mapping = any | .state1 => .state2`
 public func any<T>(_: T) -> Bool
 {
     return true
 }
 
 /// Folds multiple `Automaton.Mapping`s into one (preceding mapping has higher priority).
-public func reduce<State, Input, Mappings: SequenceType where Mappings.Generator.Element == Automaton<State, Input>.Mapping>(mappings: Mappings) -> Automaton<State, Input>.Mapping
+public func reduce<State, Input, Mappings: Sequence>(_ mappings: Mappings) -> Automaton<State, Input>.Mapping
+    where Mappings.Iterator.Element == Automaton<State, Input>.Mapping
 {
     return { fromState, input in
         for mapping in mappings {
@@ -90,7 +95,8 @@ public func reduce<State, Input, Mappings: SequenceType where Mappings.Generator
 }
 
 /// Folds multiple `Automaton.NextMapping`s into one (preceding mapping has higher priority).
-public func reduce<State, Input, Mappings: SequenceType where Mappings.Generator.Element == Automaton<State, Input>.NextMapping>(mappings: Mappings) -> Automaton<State, Input>.NextMapping
+public func reduce<State, Input, Mappings: Sequence>(_ mappings: Mappings) -> Automaton<State, Input>.NextMapping
+    where Mappings.Iterator.Element == Automaton<State, Input>.NextMapping
 {
     return { fromState, input in
         for mapping in mappings {

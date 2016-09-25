@@ -30,27 +30,27 @@ class NextMappingLatestSpec: QuickSpec
             beforeEach {
                 testScheduler = TestScheduler()
 
-                /// Sends `.LoginOK` after delay, simulating async work during `.LoggingIn`.
+                /// Sends `.loginOK` after delay, simulating async work during `.loggingIn`.
                 let loginOKProducer =
-                    Observable.just(AuthInput.LoginOK)
+                    Observable.just(AuthInput.loginOK)
                         .delay(1, onScheduler: testScheduler)
 
-                /// Sends `.LogoutOK` after delay, simulating async work during `.LoggingOut`.
+                /// Sends `.logoutOK` after delay, simulating async work during `.loggingOut`.
                 let logoutOKProducer =
-                    Observable.just(AuthInput.LogoutOK)
+                    Observable.just(AuthInput.logoutOK)
                         .delay(1, onScheduler: testScheduler)
 
                 let mappings: [Automaton.NextMapping] = [
-                    .Login    | .LoggedOut  => .LoggingIn  | loginOKProducer,
-                    .LoginOK  | .LoggingIn  => .LoggedIn   | .empty(),
-                    .Logout   | .LoggedIn   => .LoggingOut | logoutOKProducer,
-                    .LogoutOK | .LoggingOut => .LoggedOut  | .empty(),
+                    .login    | .loggedOut  => .loggingIn  | loginOKProducer,
+                    .loginOK  | .loggingIn  => .loggedIn   | .empty(),
+                    .logout   | .loggedIn   => .loggingOut | logoutOKProducer,
+                    .logoutOK | .loggingOut => .loggedOut  | .empty(),
                 ]
 
-                // strategy = `.Latest`
-                automaton = Automaton(state: .LoggedOut, input: signal, mapping: reduce(mappings), strategy: .Latest)
+                // strategy = `.latest`
+                automaton = Automaton(state: .loggedOut, input: signal, mapping: reduce(mappings), strategy: .latest)
 
-                automaton?.replies.observeNext { reply in
+                automaton?.replies.observeValues { reply in
                     lastReply = reply
                 }
 
@@ -58,33 +58,33 @@ class NextMappingLatestSpec: QuickSpec
             }
 
             it("`strategy = .Latest` should not interrupt inner next-producers when transition fails") {
-                expect(automaton?.state.value) == .LoggedOut
+                expect(automaton?.state.value) == .loggedOut
                 expect(lastReply).to(beNil())
 
-                observer.sendNext(.Login)
+                observer.send(next: .login)
 
-                expect(lastReply?.input) == .Login
-                expect(lastReply?.fromState) == .LoggedOut
-                expect(lastReply?.toState) == .LoggingIn
-                expect(automaton?.state.value) == .LoggingIn
+                expect(lastReply?.input) == .login
+                expect(lastReply?.fromState) == .loggedOut
+                expect(lastReply?.toState) == .loggingIn
+                expect(automaton?.state.value) == .loggingIn
 
                 testScheduler.advanceByInterval(0.1)
 
                 // fails (`loginOKProducer` will not be interrupted)
-                observer.sendNext(.Login)
+                observer.send(next: .login)
 
-                expect(lastReply?.input) == .Login
-                expect(lastReply?.fromState) == .LoggingIn
+                expect(lastReply?.input) == .login
+                expect(lastReply?.fromState) == .loggingIn
                 expect(lastReply?.toState).to(beNil())
-                expect(automaton?.state.value) == .LoggingIn
+                expect(automaton?.state.value) == .loggingIn
 
-                // `loginOKProducer` will automatically send `.LoginOK`
+                // `loginOKProducer` will automatically send `.loginOK`
                 testScheduler.advanceByInterval(1)
 
-                expect(lastReply?.input) == .LoginOK
-                expect(lastReply?.fromState) == .LoggingIn
-                expect(lastReply?.toState) == .LoggedIn
-                expect(automaton?.state.value) == .LoggedIn
+                expect(lastReply?.input) == .loginOK
+                expect(lastReply?.fromState) == .loggingIn
+                expect(lastReply?.toState) == .loggedIn
+                expect(automaton?.state.value) == .loggedIn
             }
 
         }

@@ -12,7 +12,7 @@ import RxSwift
 // R-A-C! R-A-C!
 
 extension ObservableType {
-    func delay(time: NSTimeInterval, onScheduler scheduler: SchedulerType) -> Observable<E> {
+    func delay(_ time: TimeInterval, onScheduler scheduler: SchedulerType) -> Observable<E> {
         return self.flatMap { element in
             return Observable<Int>.interval(time, scheduler: scheduler)
                 .map { _ in element }
@@ -22,17 +22,19 @@ extension ObservableType {
 }
 
 extension ObservableType {
-    final func observeNext(next: E -> Void) -> Disposable {
-        return self.subscribeNext(next)
+    @discardableResult
+    final func observeValues(_ next: @escaping (E) -> Void) -> Disposable {
+        return self.subscribe(onNext: next)
     }
 
-    final func observe(observer: Event<E> -> Void) -> Disposable {
+    @discardableResult
+    final func observe(_ observer: @escaping (Event<E>) -> Void) -> Disposable {
         return self.subscribe(AnyObserver(eventHandler: observer))
     }
 }
 
 extension ObserverType {
-    final func sendNext(value: E) {
+    final func send(next value: E) {
         self.onNext(value)
     }
 
@@ -50,7 +52,7 @@ extension Event {
 typealias TestScheduler = HistoricalScheduler
 
 extension HistoricalScheduler {
-    func advanceByInterval(interval: NSTimeInterval) {
-        self.advanceTo(NSDate(timeInterval: interval, sinceDate: self.clock))
+    func advanceByInterval(_ interval: TimeInterval) {
+        self.advanceTo(Date(timeInterval: interval, since: self.clock))
     }
 }

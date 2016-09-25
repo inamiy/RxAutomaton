@@ -11,10 +11,10 @@ import RxAutomaton
 
 enum AuthState: String, CustomStringConvertible
 {
-    case LoggedOut = "LoggedOut"
-    case LoggingIn = "LoggingIn"
-    case LoggedIn = "LoggedIn"
-    case LoggingOut = "LoggingOut"
+    case loggedOut
+    case loggingIn
+    case loggedIn
+    case loggingOut
 
     var description: String { return self.rawValue }
 }
@@ -24,23 +24,23 @@ enum AuthState: String, CustomStringConvertible
 /// (but Swift can't make them as `private case`)
 enum AuthInput: String, CustomStringConvertible
 {
-    case Login = "Login"
-    case LoginOK = "LoginOK"
-    case Logout = "Logout"
-    case ForceLogout = "ForceLogout"
-    case LogoutOK = "LogoutOK"
+    case login
+    case loginOK
+    case logout
+    case forceLogout
+    case logoutOK
 
     var description: String { return self.rawValue }
 }
 
 enum MyState
 {
-    case State0, State1, State2
+    case state0, state1, state2
 }
 
 enum MyInput
 {
-    case Input0, Input1, Input2
+    case input0, input1, input2
 }
 
 // MARK: Extensions
@@ -50,10 +50,10 @@ extension Event
     public var isCompleting: Bool
     {
         switch self {
-            case .Next, .Error:
+            case .next, .error:
                 return false
 
-            case .Completed:
+            case .completed:
                 return true
         }
     }

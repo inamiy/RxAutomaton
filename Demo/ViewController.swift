@@ -27,16 +27,14 @@ class AutomatonViewController: UIViewController
 
     private let _disposeBag = DisposeBag()
 
-    deinit { logDeinit(self) }
-
     override func viewDidLoad()
     {
         super.viewDidLoad()
 
-        let (textSignal, textObserver) = Observable<String>.pipe()
+        let (textSignal, textObserver) = Observable<String?>.pipe()
 
         /// Count-up effect.
-        func countUpProducer(status: String, count: Int = 4, interval: NSTimeInterval = 1, nextInput: Input) -> Observable<Input>
+        func countUpProducer(status: String, count: Int = 4, interval: TimeInterval = 1, nextInput: Input) -> Observable<Input>
         {
             return Observable<Int>.interval(interval, scheduler: MainScheduler.instance)
                 .take(count)
@@ -49,66 +47,66 @@ class AutomatonViewController: UIViewController
                         default:    return "\(status)... (\($0))"
                     }
                 }
-                .doOnNext(textObserver.onNext)
+                .do(onNext: textObserver.onNext)
                 .then(value: nextInput)
         }
 
-        let loginOKProducer = countUpProducer("Login", nextInput: .LoginOK)
-        let logoutOKProducer = countUpProducer("Logout", nextInput: .LogoutOK)
-        let forceLogoutOKProducer = countUpProducer("ForceLogout", nextInput: .LogoutOK)
+        let loginOKProducer = countUpProducer(status: "Login", nextInput: .loginOK)
+        let logoutOKProducer = countUpProducer(status: "Logout", nextInput: .logoutOK)
+        let forceLogoutOKProducer = countUpProducer(status: "ForceLogout", nextInput: .logoutOK)
 
         // NOTE: predicate style i.e. `T -> Bool` is also available.
-        let canForceLogout: State -> Bool = [.LoggingIn, .LoggedIn].contains
+        let canForceLogout: (State) -> Bool = [.loggingIn, .loggedIn].contains
 
         /// Transition mapping.
         let mappings: [Automaton<State, Input>.NextMapping] = [
 
           /*  Input   |   fromState => toState     |      Effect       */
           /* ----------------------------------------------------------*/
-            .Login    | .LoggedOut  => .LoggingIn  | loginOKProducer,
-            .LoginOK  | .LoggingIn  => .LoggedIn   | .empty(),
-            .Logout   | .LoggedIn   => .LoggingOut | logoutOKProducer,
-            .LogoutOK | .LoggingOut => .LoggedOut  | .empty(),
+            .login    | .loggedOut  => .loggingIn  | loginOKProducer,
+            .loginOK  | .loggingIn  => .loggedIn   | .empty(),
+            .logout   | .loggedIn   => .loggingOut | logoutOKProducer,
+            .logoutOK | .loggingOut => .loggedOut  | .empty(),
 
-            .ForceLogout | canForceLogout => .LoggingOut | forceLogoutOKProducer
+            .forceLogout | canForceLogout => .loggingOut | forceLogoutOKProducer
         ]
 
         let (inputSignal, inputObserver) = Observable<Input>.pipe()
 
-        let automaton = Automaton(state: .LoggedOut, input: inputSignal, mapping: reduce(mappings), strategy: .Latest)
+        let automaton = Automaton(state: .loggedOut, input: inputSignal, mapping: reduce(mappings), strategy: .latest)
         self._automaton = automaton
 
         automaton.replies
-            .subscribeNext { reply in
+            .subscribe(onNext: { reply in
                 print("received reply = \(reply)")
-            }
+            })
             .addDisposableTo(_disposeBag)
 
         automaton.state.asObservable()
-            .subscribeNext { state in
+            .subscribe(onNext: { state in
                 print("current state = \(state)")
-            }
+            })
             .addDisposableTo(_disposeBag)
 
         // Setup buttons.
         do {
-            self.loginButton?.rx_tap
-                .subscribeNext { _ in inputObserver.onNext(.Login) }
+            self.loginButton?.rx.tap
+                .subscribe(onNext: { _ in inputObserver.onNext(.login) })
                 .addDisposableTo(_disposeBag)
 
-            self.logoutButton?.rx_tap
-                .subscribeNext { _ in inputObserver.onNext(.Logout) }
+            self.logoutButton?.rx.tap
+                .subscribe(onNext: { _ in inputObserver.onNext(.logout) })
                 .addDisposableTo(_disposeBag)
 
-            self.forceLogoutButton?.rx_tap
-                .subscribeNext { _ in inputObserver.onNext(.ForceLogout) }
+            self.forceLogoutButton?.rx.tap
+                .subscribe(onNext: { _ in inputObserver.onNext(.forceLogout) })
                 .addDisposableTo(_disposeBag)
         }
 
         // Setup label.
         do {
             textSignal
-                .bindTo(self.label!.rx_text)
+                .bindTo(self.label!.rx.text)
                 .addDisposableTo(_disposeBag)
         }
 
@@ -121,7 +119,7 @@ class AutomatonViewController: UIViewController
 
             automaton.state.asDriver()
                 .map(_pulsatorColor)
-                .map { $0.CGColor }
+                .map { $0.cgColor }
                 .drive(pulsator.rx_backgroundColor)
                 .addDisposableTo(_disposeBag)
 
@@ -130,10 +128,10 @@ class AutomatonViewController: UIViewController
                 .drive(pulsator.rx_position)
                 .addDisposableTo(_disposeBag)
 
-            // Overwrite the pulsator color to red if `.ForceLogout` succeeded.
+            // Overwrite the pulsator color to red if `.forceLogout` succeeded.
             automaton.replies
-                .filter { $0.toState != nil && $0.input == .ForceLogout }
-                .map { _ in UIColor.redColor().CGColor }
+                .filter { $0.toState != nil && $0.input == .forceLogout }
+                .map { _ in UIColor.red.cgColor }
                 .bindTo(pulsator.rx_backgroundColor)
                 .addDisposableTo(_disposeBag)
         }
@@ -150,7 +148,7 @@ private func _createPulsator() -> Pulsator
     pulsator.numPulse = 5
     pulsator.radius = 100
     pulsator.animationDuration = 7
-    pulsator.backgroundColor = UIColor(red: 0, green: 0.455, blue: 0.756, alpha: 1).CGColor
+    pulsator.backgroundColor = UIColor(red: 0, green: 0.455, blue: 0.756, alpha: 1).cgColor
 
     pulsator.start()
 
@@ -160,21 +158,21 @@ private func _createPulsator() -> Pulsator
 private func _pulsatorPosition(state: State) -> CGPoint
 {
     switch state {
-        case .LoggedOut:    return CGPoint(x: 40, y: 100)
-        case .LoggingIn:    return CGPoint(x: 190, y: 20)
-        case .LoggedIn:     return CGPoint(x: 330, y: 100)
-        case .LoggingOut:   return CGPoint(x: 190, y: 180)
+        case .loggedOut:    return CGPoint(x: 40, y: 100)
+        case .loggingIn:    return CGPoint(x: 190, y: 20)
+        case .loggedIn:     return CGPoint(x: 330, y: 100)
+        case .loggingOut:   return CGPoint(x: 190, y: 180)
     }
 }
 
 private func _pulsatorColor(state: State) -> UIColor
 {
     switch state {
-        case .LoggedOut:
+        case .loggedOut:
             return UIColor(red: 0, green: 0.455, blue: 0.756, alpha: 1)     // blue
-        case .LoggingIn, .LoggingOut:
+        case .loggingIn, .loggingOut:
             return UIColor(red: 0.97, green: 0.82, blue: 0.30, alpha: 1)    // yellow
-        case .LoggedIn:
+        case .loggedIn:
             return UIColor(red: 0.50, green: 0.85, blue: 0.46, alpha: 1)    // green
     }
 }

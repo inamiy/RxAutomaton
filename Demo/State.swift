@@ -8,10 +8,10 @@
 
 enum State: String, CustomStringConvertible
 {
-    case LoggedOut = "LoggedOut"
-    case LoggingIn = "LoggingIn"
-    case LoggedIn = "LoggedIn"
-    case LoggingOut = "LoggingOut"
+    case loggedOut
+    case loggingIn
+    case loggedIn
+    case loggingOut
 
     var description: String { return self.rawValue }
 }

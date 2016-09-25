@@ -25,9 +25,6 @@
 		48873F461D616AFD00BF70F4 /* Reply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48873F451D616AFD00BF70F4 /* Reply.swift */; };
 		48873F481D616B4900BF70F4 /* Mapping+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48873F471D616B4900BF70F4 /* Mapping+Helper.swift */; };
 		48873F4A1D617EF600BF70F4 /* FlattenStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48873F491D617EF600BF70F4 /* FlattenStrategy.swift */; };
-		4887428E1D61923300BF70F4 /* UniversalFramework_Base.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 488741181D61923300BF70F4 /* UniversalFramework_Base.xcconfig */; };
-		4887428F1D61923300BF70F4 /* UniversalFramework_Framework.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 488741191D61923300BF70F4 /* UniversalFramework_Framework.xcconfig */; };
-		488742901D61923300BF70F4 /* UniversalFramework_Test.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 4887411A1D61923300BF70F4 /* UniversalFramework_Test.xcconfig */; };
 		48AC076D1D61C962000293FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AC076C1D61C962000293FD /* AppDelegate.swift */; };
 		48AC076F1D61C962000293FD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AC076E1D61C962000293FD /* ViewController.swift */; };
 		48AC07741D61C962000293FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48AC07731D61C962000293FD /* Assets.xcassets */; };
@@ -49,13 +46,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		4822CC441D619AAE00783A77 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 488739291D61697200BF70F4 /* Rx.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = C88FA4FD1C25C44800CCFEA4;
-			remoteInfo = "RxTests-iOS";
-		};
 		487BDE5B1D619D1100C86902 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 488739291D61697200BF70F4 /* Rx.xcodeproj */;
@@ -542,8 +532,8 @@
 			isa = PBXGroup;
 			children = (
 				488742DC1D61923F00BF70F4 /* Quick.framework */,
-				488742DE1D61923F00BF70F4 /* Quick-OSXTests.xctest */,
-				488742E01D61923F00BF70F4 /* QuickFocused-OSXTests.xctest */,
+				488742DE1D61923F00BF70F4 /* Quick-macOSTests.xctest */,
+				488742E01D61923F00BF70F4 /* QuickFocused-macOSTests.xctest */,
 				488742E21D61923F00BF70F4 /* Quick.framework */,
 				488742E41D61923F00BF70F4 /* Quick-iOSTests.xctest */,
 				488742E61D61923F00BF70F4 /* QuickFocused-iOSTests.xctest */,
@@ -557,10 +547,10 @@
 		488742ED1D61924300BF70F4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				488742F61D61924300BF70F4 /* Nimble.framework */,
-				488742F81D61924300BF70F4 /* NimbleTests.xctest */,
 				488742FA1D61924300BF70F4 /* Nimble.framework */,
 				488742FC1D61924300BF70F4 /* NimbleTests.xctest */,
+				488742F61D61924300BF70F4 /* Nimble.framework */,
+				488742F81D61924300BF70F4 /* NimbleTests.xctest */,
 				488742FE1D61924300BF70F4 /* Nimble.framework */,
 				488743001D61924300BF70F4 /* NimbleTests.xctest */,
 			);
@@ -691,7 +681,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				4822CC451D619AAE00783A77 /* PBXTargetDependency */,
 				488738E91D61689100BF70F4 /* PBXTargetDependency */,
 			);
 			name = RxAutomatonTests;
@@ -728,14 +717,16 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Yasuhiro Inami";
 				TargetAttributes = {
 					488738DB1D61689000BF70F4 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 					};
 					488738E51D61689100BF70F4 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 					};
 					48AC07691D61C962000293FD = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -816,17 +807,17 @@
 			remoteRef = 488742DB1D61923F00BF70F4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		488742DE1D61923F00BF70F4 /* Quick-OSXTests.xctest */ = {
+		488742DE1D61923F00BF70F4 /* Quick-macOSTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "Quick-OSXTests.xctest";
+			path = "Quick-macOSTests.xctest";
 			remoteRef = 488742DD1D61923F00BF70F4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		488742E01D61923F00BF70F4 /* QuickFocused-OSXTests.xctest */ = {
+		488742E01D61923F00BF70F4 /* QuickFocused-macOSTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "QuickFocused-OSXTests.xctest";
+			path = "QuickFocused-macOSTests.xctest";
 			remoteRef = 488742DF1D61923F00BF70F4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -1054,9 +1045,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4887428F1D61923300BF70F4 /* UniversalFramework_Framework.xcconfig in Resources */,
-				4887428E1D61923300BF70F4 /* UniversalFramework_Base.xcconfig in Resources */,
-				488742901D61923300BF70F4 /* UniversalFramework_Test.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1115,11 +1103,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4822CC451D619AAE00783A77 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "RxTests-iOS";
-			targetProxy = 4822CC441D619AAE00783A77 /* PBXContainerItemProxy */;
-		};
 		488738E91D61689100BF70F4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 488738DB1D61689000BF70F4 /* RxAutomaton */;
@@ -1182,11 +1165,12 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -1230,11 +1214,12 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1316,8 +1301,8 @@
 		48AC07791D61C962000293FD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Demo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1330,8 +1315,8 @@
 		48AC077A1D61C962000293FD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Demo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

@@ -26,13 +26,13 @@ class AnyMappingSpec: QuickSpec
 
             beforeEach {
                 let mappings: [Automaton.Mapping] = [
-                    .Input0 | any => .State1,
-                    any     | .State1 => .State2
+                    .input0 | any => .state1,
+                    any     | .state1 => .state2
                 ]
 
-                automaton = Automaton(state: .State0, input: signal, mapping: reduce(mappings))
+                automaton = Automaton(state: .state0, input: signal, mapping: reduce(mappings))
 
-                automaton?.replies.observeNext { reply in
+                automaton?.replies.observeValues { reply in
                     lastReply = reply
                 }
 
@@ -40,32 +40,32 @@ class AnyMappingSpec: QuickSpec
             }
 
             it("`anyState`/`anyInput` succeeds") {
-                expect(automaton?.state.value) == .State0
+                expect(automaton?.state.value) == .state0
                 expect(lastReply).to(beNil())
 
                 // try any input (fails)
-                observer.sendNext(.Input2)
+                observer.send(next: .input2)
 
-                expect(lastReply?.input) == .Input2
-                expect(lastReply?.fromState) == .State0
+                expect(lastReply?.input) == .input2
+                expect(lastReply?.fromState) == .state0
                 expect(lastReply?.toState).to(beNil())
-                expect(automaton?.state.value) == .State0
+                expect(automaton?.state.value) == .state0
 
-                // try `.Login` from any state
-                observer.sendNext(.Input0)
+                // try `.login` from any state
+                observer.send(next: .input0)
 
-                expect(lastReply?.input) == .Input0
-                expect(lastReply?.fromState) == .State0
-                expect(lastReply?.toState) == .State1
-                expect(automaton?.state.value) == .State1
+                expect(lastReply?.input) == .input0
+                expect(lastReply?.fromState) == .state0
+                expect(lastReply?.toState) == .state1
+                expect(automaton?.state.value) == .state1
 
                 // try any input
-                observer.sendNext(.Input2)
+                observer.send(next: .input2)
 
-                expect(lastReply?.input) == .Input2
-                expect(lastReply?.fromState) == .State1
-                expect(lastReply?.toState) == .State2
-                expect(automaton?.state.value) == .State2
+                expect(lastReply?.input) == .input2
+                expect(lastReply?.fromState) == .state1
+                expect(lastReply?.toState) == .state2
+                expect(automaton?.state.value) == .state2
             }
 
         }

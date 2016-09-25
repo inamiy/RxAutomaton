@@ -28,21 +28,21 @@ class MappingSpec: QuickSpec
 
             beforeEach {
                 // NOTE: predicate style i.e. `T -> Bool` is also available.
-                let canForceLogout: AuthState -> Bool = [AuthState.LoggingIn, .LoggedIn].contains
+                let canForceLogout: (AuthState) -> Bool = [AuthState.loggingIn, .loggedIn].contains
 
                 let mappings: [Mapping] = [
-                    .Login    | .LoggedOut  => .LoggingIn,
-                    .LoginOK  | .LoggingIn  => .LoggedIn,
-                    .Logout   | .LoggedIn   => .LoggingOut,
-                    .LogoutOK | .LoggingOut => .LoggedOut,
+                    .login    | .loggedOut  => .loggingIn,
+                    .loginOK  | .loggingIn  => .loggedIn,
+                    .logout   | .loggedIn   => .loggingOut,
+                    .logoutOK | .loggingOut => .loggedOut,
 
-                    .ForceLogout | canForceLogout => .LoggingOut
+                    .forceLogout | canForceLogout => .loggingOut
                 ]
 
                 // NOTE: Use `concat` to combine all mappings.
-                automaton = Automaton(state: .LoggedOut, input: signal, mapping: reduce(mappings))
+                automaton = Automaton(state: .loggedOut, input: signal, mapping: reduce(mappings))
 
-                automaton?.replies.observeNext { reply in
+                automaton?.replies.observeValues { reply in
                     lastReply = reply
                 }
 
@@ -50,78 +50,78 @@ class MappingSpec: QuickSpec
             }
 
             it("`LoggedOut => LoggingIn => LoggedIn => LoggingOut => LoggedOut` succeed") {
-                expect(automaton?.state.value) == .LoggedOut
+                expect(automaton?.state.value) == .loggedOut
                 expect(lastReply).to(beNil())
 
-                observer.sendNext(.Login)
+                observer.send(next: .login)
 
-                expect(lastReply?.input) == .Login
-                expect(lastReply?.fromState) == .LoggedOut
-                expect(lastReply?.toState) == .LoggingIn
-                expect(automaton?.state.value) == .LoggingIn
+                expect(lastReply?.input) == .login
+                expect(lastReply?.fromState) == .loggedOut
+                expect(lastReply?.toState) == .loggingIn
+                expect(automaton?.state.value) == .loggingIn
 
-                observer.sendNext(.LoginOK)
+                observer.send(next: .loginOK)
 
-                expect(lastReply?.input) == .LoginOK
-                expect(lastReply?.fromState) == .LoggingIn
-                expect(lastReply?.toState) == .LoggedIn
-                expect(automaton?.state.value) == .LoggedIn
+                expect(lastReply?.input) == .loginOK
+                expect(lastReply?.fromState) == .loggingIn
+                expect(lastReply?.toState) == .loggedIn
+                expect(automaton?.state.value) == .loggedIn
 
-                observer.sendNext(.Logout)
+                observer.send(next: .logout)
 
-                expect(lastReply?.input) == .Logout
-                expect(lastReply?.fromState) == .LoggedIn
-                expect(lastReply?.toState) == .LoggingOut
-                expect(automaton?.state.value) == .LoggingOut
+                expect(lastReply?.input) == .logout
+                expect(lastReply?.fromState) == .loggedIn
+                expect(lastReply?.toState) == .loggingOut
+                expect(automaton?.state.value) == .loggingOut
 
-                observer.sendNext(.LogoutOK)
+                observer.send(next: .logoutOK)
 
-                expect(lastReply?.input) == .LogoutOK
-                expect(lastReply?.fromState) == .LoggingOut
-                expect(lastReply?.toState) == .LoggedOut
-                expect(automaton?.state.value) == .LoggedOut
+                expect(lastReply?.input) == .logoutOK
+                expect(lastReply?.fromState) == .loggingOut
+                expect(lastReply?.toState) == .loggedOut
+                expect(automaton?.state.value) == .loggedOut
             }
 
             it("`LoggedOut => LoggingIn ==(ForceLogout)==> LoggingOut => LoggedOut` succeed") {
-                expect(automaton?.state.value) == .LoggedOut
+                expect(automaton?.state.value) == .loggedOut
                 expect(lastReply).to(beNil())
 
-                observer.sendNext(.Login)
+                observer.send(next: .login)
 
-                expect(lastReply?.input) == .Login
-                expect(lastReply?.fromState) == .LoggedOut
-                expect(lastReply?.toState) == .LoggingIn
-                expect(automaton?.state.value) == .LoggingIn
+                expect(lastReply?.input) == .login
+                expect(lastReply?.fromState) == .loggedOut
+                expect(lastReply?.toState) == .loggingIn
+                expect(automaton?.state.value) == .loggingIn
 
-                observer.sendNext(.ForceLogout)
+                observer.send(next: .forceLogout)
 
-                expect(lastReply?.input) == .ForceLogout
-                expect(lastReply?.fromState) == .LoggingIn
-                expect(lastReply?.toState) == .LoggingOut
-                expect(automaton?.state.value) == .LoggingOut
-
-                // fails
-                observer.sendNext(.LoginOK)
-
-                expect(lastReply?.input) == .LoginOK
-                expect(lastReply?.fromState) == .LoggingOut
-                expect(lastReply?.toState).to(beNil())
-                expect(automaton?.state.value) == .LoggingOut
+                expect(lastReply?.input) == .forceLogout
+                expect(lastReply?.fromState) == .loggingIn
+                expect(lastReply?.toState) == .loggingOut
+                expect(automaton?.state.value) == .loggingOut
 
                 // fails
-                observer.sendNext(.Logout)
+                observer.send(next: .loginOK)
 
-                expect(lastReply?.input) == .Logout
-                expect(lastReply?.fromState) == .LoggingOut
+                expect(lastReply?.input) == .loginOK
+                expect(lastReply?.fromState) == .loggingOut
                 expect(lastReply?.toState).to(beNil())
-                expect(automaton?.state.value) == .LoggingOut
+                expect(automaton?.state.value) == .loggingOut
 
-                observer.sendNext(.LogoutOK)
+                // fails
+                observer.send(next: .logout)
 
-                expect(lastReply?.input) == .LogoutOK
-                expect(lastReply?.fromState) == .LoggingOut
-                expect(lastReply?.toState) == .LoggedOut
-                expect(automaton?.state.value) == .LoggedOut
+                expect(lastReply?.input) == .logout
+                expect(lastReply?.fromState) == .loggingOut
+                expect(lastReply?.toState).to(beNil())
+                expect(automaton?.state.value) == .loggingOut
+
+                observer.send(next: .logoutOK)
+
+                expect(lastReply?.input) == .logoutOK
+                expect(lastReply?.fromState) == .loggingOut
+                expect(lastReply?.toState) == .loggedOut
+                expect(automaton?.state.value) == .loggedOut
             }
 
         }
@@ -131,26 +131,26 @@ class MappingSpec: QuickSpec
             beforeEach {
                 let mapping: Mapping = { fromState, input in
                     switch (fromState, input) {
-                        case (.LoggedOut, .Login):
-                            return .LoggingIn
-                        case (.LoggingIn, .LoginOK):
-                            return .LoggedIn
-                        case (.LoggedIn, .Logout):
-                            return .LoggingOut
-                        case (.LoggingOut, .LogoutOK):
-                            return .LoggedOut
+                        case (.loggedOut, .login):
+                            return .loggingIn
+                        case (.loggingIn, .loginOK):
+                            return .loggedIn
+                        case (.loggedIn, .logout):
+                            return .loggingOut
+                        case (.loggingOut, .logoutOK):
+                            return .loggedOut
 
                         // ForceLogout
-                        case (.LoggingIn, .ForceLogout), (.LoggedIn, .ForceLogout):
-                            return .LoggingOut
+                        case (.loggingIn, .forceLogout), (.loggedIn, .forceLogout):
+                            return .loggingOut
 
                         default:
                             return nil
                     }
                 }
 
-                automaton = Automaton(state: .LoggedOut, input: signal, mapping: mapping)
-                automaton?.replies.observeNext { reply in
+                automaton = Automaton(state: .loggedOut, input: signal, mapping: mapping)
+                automaton?.replies.observeValues { reply in
                     lastReply = reply
                 }
 
@@ -158,78 +158,78 @@ class MappingSpec: QuickSpec
             }
 
             it("`LoggedOut => LoggingIn => LoggedIn => LoggingOut => LoggedOut` succeed") {
-                expect(automaton?.state.value) == .LoggedOut
+                expect(automaton?.state.value) == .loggedOut
                 expect(lastReply).to(beNil())
 
-                observer.sendNext(.Login)
+                observer.send(next: .login)
 
-                expect(lastReply?.input) == .Login
-                expect(lastReply?.fromState) == .LoggedOut
-                expect(lastReply?.toState) == .LoggingIn
-                expect(automaton?.state.value) == .LoggingIn
+                expect(lastReply?.input) == .login
+                expect(lastReply?.fromState) == .loggedOut
+                expect(lastReply?.toState) == .loggingIn
+                expect(automaton?.state.value) == .loggingIn
 
-                observer.sendNext(.LoginOK)
+                observer.send(next: .loginOK)
 
-                expect(lastReply?.input) == .LoginOK
-                expect(lastReply?.fromState) == .LoggingIn
-                expect(lastReply?.toState) == .LoggedIn
-                expect(automaton?.state.value) == .LoggedIn
+                expect(lastReply?.input) == .loginOK
+                expect(lastReply?.fromState) == .loggingIn
+                expect(lastReply?.toState) == .loggedIn
+                expect(automaton?.state.value) == .loggedIn
 
-                observer.sendNext(.Logout)
+                observer.send(next: .logout)
 
-                expect(lastReply?.input) == .Logout
-                expect(lastReply?.fromState) == .LoggedIn
-                expect(lastReply?.toState) == .LoggingOut
-                expect(automaton?.state.value) == .LoggingOut
+                expect(lastReply?.input) == .logout
+                expect(lastReply?.fromState) == .loggedIn
+                expect(lastReply?.toState) == .loggingOut
+                expect(automaton?.state.value) == .loggingOut
 
-                observer.sendNext(.LogoutOK)
+                observer.send(next: .logoutOK)
 
-                expect(lastReply?.input) == .LogoutOK
-                expect(lastReply?.fromState) == .LoggingOut
-                expect(lastReply?.toState) == .LoggedOut
-                expect(automaton?.state.value) == .LoggedOut
+                expect(lastReply?.input) == .logoutOK
+                expect(lastReply?.fromState) == .loggingOut
+                expect(lastReply?.toState) == .loggedOut
+                expect(automaton?.state.value) == .loggedOut
             }
 
             it("`LoggedOut => LoggingIn ==(ForceLogout)==> LoggingOut => LoggedOut` succeed") {
-                expect(automaton?.state.value) == .LoggedOut
+                expect(automaton?.state.value) == .loggedOut
                 expect(lastReply).to(beNil())
 
-                observer.sendNext(.Login)
+                observer.send(next: .login)
 
-                expect(lastReply?.input) == .Login
-                expect(lastReply?.fromState) == .LoggedOut
-                expect(lastReply?.toState) == .LoggingIn
-                expect(automaton?.state.value) == .LoggingIn
+                expect(lastReply?.input) == .login
+                expect(lastReply?.fromState) == .loggedOut
+                expect(lastReply?.toState) == .loggingIn
+                expect(automaton?.state.value) == .loggingIn
 
-                observer.sendNext(.ForceLogout)
+                observer.send(next: .forceLogout)
 
-                expect(lastReply?.input) == .ForceLogout
-                expect(lastReply?.fromState) == .LoggingIn
-                expect(lastReply?.toState) == .LoggingOut
-                expect(automaton?.state.value) == .LoggingOut
-
-                // fails
-                observer.sendNext(.LoginOK)
-
-                expect(lastReply?.input) == .LoginOK
-                expect(lastReply?.fromState) == .LoggingOut
-                expect(lastReply?.toState).to(beNil())
-                expect(automaton?.state.value) == .LoggingOut
+                expect(lastReply?.input) == .forceLogout
+                expect(lastReply?.fromState) == .loggingIn
+                expect(lastReply?.toState) == .loggingOut
+                expect(automaton?.state.value) == .loggingOut
 
                 // fails
-                observer.sendNext(.Logout)
+                observer.send(next: .loginOK)
 
-                expect(lastReply?.input) == .Logout
-                expect(lastReply?.fromState) == .LoggingOut
+                expect(lastReply?.input) == .loginOK
+                expect(lastReply?.fromState) == .loggingOut
                 expect(lastReply?.toState).to(beNil())
-                expect(automaton?.state.value) == .LoggingOut
+                expect(automaton?.state.value) == .loggingOut
 
-                observer.sendNext(.LogoutOK)
+                // fails
+                observer.send(next: .logout)
 
-                expect(lastReply?.input) == .LogoutOK
-                expect(lastReply?.fromState) == .LoggingOut
-                expect(lastReply?.toState) == .LoggedOut
-                expect(automaton?.state.value) == .LoggedOut
+                expect(lastReply?.input) == .logout
+                expect(lastReply?.fromState) == .loggingOut
+                expect(lastReply?.toState).to(beNil())
+                expect(automaton?.state.value) == .loggingOut
+
+                observer.send(next: .logoutOK)
+
+                expect(lastReply?.input) == .logoutOK
+                expect(lastReply?.fromState) == .loggingOut
+                expect(lastReply?.toState) == .loggedOut
+                expect(automaton?.state.value) == .loggedOut
             }
 
         }

@@ -38,18 +38,18 @@ class TerminatingSpec: QuickSpec
                 observer = observer_
 
                 let sendInput1And2AfterDelay: Observable<MyInput> = [
-                    Observable.just(.Input1).delay(1, onScheduler: testScheduler),
-                    Observable.just(.Input2).delay(1, onScheduler: testScheduler),
+                    Observable.just(.input1).delay(1, onScheduler: testScheduler),
+                    Observable.just(.input2).delay(1, onScheduler: testScheduler),
                 ].concat()
 
                 let mappings: [Automaton.NextMapping] = [
-                    .Input0 | .State0 => .State1 | sendInput1And2AfterDelay,
-                    .Input1 | .State1 => .State2 | .empty(),
-                    .Input2 | .State2 => .State0 | .empty()
+                    .input0 | .state0 => .state1 | sendInput1And2AfterDelay,
+                    .input1 | .state1 => .state2 | .empty(),
+                    .input2 | .state2 => .state0 | .empty()
                 ]
 
-                // strategy = `.Merge`
-                automaton = Automaton(state: .State0, input: signal, mapping: reduce(mappings), strategy: .Merge)
+                // strategy = `.merge`
+                automaton = Automaton(state: .state0, input: signal, mapping: reduce(mappings), strategy: .merge)
 
                 automaton?.replies.observe { event in
                     lastRepliesEvent = event
@@ -67,7 +67,7 @@ class TerminatingSpec: QuickSpec
             describe("Automaton deinit") {
 
                 it("automaton deinits before sending input") {
-                    expect(automaton?.state.value) == .State0
+                    expect(automaton?.state.value) == .state0
                     expect(lastReply).to(beNil())
                     expect(lastRepliesEvent).to(beNil())
 
@@ -80,23 +80,23 @@ class TerminatingSpec: QuickSpec
                 }
 
                 it("automaton deinits while sending input") {
-                    expect(automaton?.state.value) == .State0
+                    expect(automaton?.state.value) == .state0
                     expect(lastReply).to(beNil())
                     expect(lastRepliesEvent).to(beNil())
 //                    expect(nextProducerDisposed) == false
 
-                    observer.sendNext(.Input0)
+                    observer.send(next: .input0)
 
-                    expect(automaton?.state.value) == .State1
-                    expect(lastReply?.input) == .Input0
+                    expect(automaton?.state.value) == .state1
+                    expect(lastReply?.input) == .input0
                     expect(lastRepliesEvent?.isTerminating) == false
 //                    expect(nextProducerDisposed) == false
 
-                    // `sendInput1And2AfterDelay` will automatically send `.Input1` at this point
+                    // `sendInput1And2AfterDelay` will automatically send `.input1` at this point
                     testScheduler.advanceByInterval(1)
 
-                    expect(automaton?.state.value) == .State2
-                    expect(lastReply?.input) == .Input1
+                    expect(automaton?.state.value) == .state2
+                    expect(lastReply?.input) == .input1
                     expect(lastRepliesEvent?.isTerminating) == false
 //                    expect(nextProducerDisposed) == false
 
@@ -104,16 +104,16 @@ class TerminatingSpec: QuickSpec
                     automaton = nil
 
                     expect(weakAutomaton).to(beNil())
-                    expect(lastReply?.input) == .Input1
+                    expect(lastReply?.input) == .input1
                     expect(lastRepliesEvent?.isCompleting) == true  // isCompleting
 //                    expect(nextProducerDisposed) == true
 
-                    // If `sendInput1And2AfterDelay` is still alive, it will send `.Input2` at this point,
+                    // If `sendInput1And2AfterDelay` is still alive, it will send `.input2` at this point,
                     // but it's already interrupted because `automaton` is deinited.
                     testScheduler.advanceByInterval(1)
 
                     // Last input should NOT change.
-                    expect(lastReply?.input) == .Input1
+                    expect(lastReply?.input) == .input1
                 }
 
             }
@@ -123,53 +123,53 @@ class TerminatingSpec: QuickSpec
 //            describe("inputSignal sendInterrupted") {
 //
 //                it("inputSignal sendInterrupted before sending input") {
-//                    expect(automaton?.state.value) == .State0
+//                    expect(automaton?.state.value) == .state0
 //                    expect(lastReply).to(beNil())
 //                    expect(lastRepliesEvent).to(beNil())
 //
 //                    observer.sendInterrupted()
 //
-//                    expect(automaton?.state.value) == .State0
+//                    expect(automaton?.state.value) == .state0
 //                    expect(lastReply).to(beNil())
 ////                    expect(lastRepliesEvent?.isInterrupting) == true
 //                }
 //
 //                it("inputSignal sendInterrupted while sending input") {
-//                    expect(automaton?.state.value) == .State0
+//                    expect(automaton?.state.value) == .state0
 //                    expect(automaton).toNot(beNil())
 //                    expect(lastReply).to(beNil())
 //                    expect(lastRepliesEvent).to(beNil())
 //                    expect(nextProducerDisposed) == false
 //
-//                    observer.sendNext(.Input0)
+//                    observer.send(next: .input0)
 //
-//                    expect(automaton?.state.value) == .State1
-//                    expect(lastReply?.input) == .Input0
+//                    expect(automaton?.state.value) == .state1
+//                    expect(lastReply?.input) == .input0
 //                    expect(lastRepliesEvent?.isTerminating) == false
 //                    expect(nextProducerDisposed) == false
 //
-//                    // `sendInput1And2AfterDelay` will automatically send `.Input1` at this point
+//                    // `sendInput1And2AfterDelay` will automatically send `.input1` at this point
 //                    testScheduler.advanceByInterval(1)
 //
-//                    expect(automaton?.state.value) == .State2
-//                    expect(lastReply?.input) == .Input1
+//                    expect(automaton?.state.value) == .state2
+//                    expect(lastReply?.input) == .input1
 //                    expect(lastRepliesEvent?.isTerminating) == false
 //                    expect(nextProducerDisposed) == false
 //
 //                    observer.sendInterrupted()
 //
-//                    expect(automaton?.state.value) == .State2
-//                    expect(lastReply?.input) == .Input1
+//                    expect(automaton?.state.value) == .state2
+//                    expect(lastReply?.input) == .input1
 ////                    expect(lastRepliesEvent?.isInterrupting) == true    // interrupting, not isCompleting
 //                    expect(nextProducerDisposed) == true
 //
-//                    // If `sendInput1And2AfterDelay` is still alive, it will send `.Input2` at this point,
+//                    // If `sendInput1And2AfterDelay` is still alive, it will send `.input2` at this point,
 //                    // but it's already interrupted because of `sendInterrupted`.
 //                    testScheduler.advanceByInterval(1)
 //
 //                    // Last state & input should NOT change.
-//                    expect(automaton?.state.value) == .State2
-//                    expect(lastReply?.input) == .Input1
+//                    expect(automaton?.state.value) == .state2
+//                    expect(lastReply?.input) == .input1
 //                }
 //
 //            }
@@ -180,55 +180,55 @@ class TerminatingSpec: QuickSpec
             describe("inputSignal sendCompleted") {
 
                 it("inputSignal sendCompleted before sending input") {
-                    expect(automaton?.state.value) == .State0
+                    expect(automaton?.state.value) == .state0
                     expect(lastReply).to(beNil())
                     expect(lastRepliesEvent).to(beNil())
 
                     observer.sendCompleted()
 
-                    expect(automaton?.state.value) == .State0
+                    expect(automaton?.state.value) == .state0
                     expect(lastReply).to(beNil())
                     expect(lastRepliesEvent?.isCompleting) == true
                 }
 
                 it("inputSignal sendCompleted while sending input") {
-                    expect(automaton?.state.value) == .State0
+                    expect(automaton?.state.value) == .state0
                     expect(lastReply).to(beNil())
                     expect(lastRepliesEvent).to(beNil())
 //                    expect(nextProducerDisposed) == false
 
-                    observer.sendNext(.Input0)
+                    observer.send(next: .input0)
 
-                    expect(automaton?.state.value) == .State1
-                    expect(lastReply?.input) == .Input0
+                    expect(automaton?.state.value) == .state1
+                    expect(lastReply?.input) == .input0
                     expect(lastRepliesEvent?.isTerminating) == false
 //                    expect(nextProducerDisposed) == false
 
-                    // `sendInput1And2AfterDelay` will automatically send `.Input1` at this point.
+                    // `sendInput1And2AfterDelay` will automatically send `.input1` at this point.
                     testScheduler.advanceByInterval(1)
 
-                    expect(automaton?.state.value) == .State2
-                    expect(lastReply?.input) == .Input1
+                    expect(automaton?.state.value) == .state2
+                    expect(lastReply?.input) == .input1
                     expect(lastRepliesEvent?.isTerminating) == false
 //                    expect(nextProducerDisposed) == false
 
                     observer.sendCompleted()
 
                     // Not completed yet because `sendInput1And2AfterDelay` is still in progress.
-                    expect(automaton?.state.value) == .State2
-                    expect(lastReply?.input) == .Input1
+                    expect(automaton?.state.value) == .state2
+                    expect(lastReply?.input) == .input1
                     expect(lastRepliesEvent?.isTerminating) == false
 //                    expect(nextProducerDisposed) == false
 
-                    // `sendInput1And2AfterDelay` will automatically send `.Input2` at this point.
+                    // `sendInput1And2AfterDelay` will automatically send `.input2` at this point.
                     testScheduler.advanceByInterval(2)
 
                     print(automaton?.state.value)
                     print(lastRepliesEvent)
 
                     // Last state & input should change.
-                    expect(automaton?.state.value) == .State0
-                    expect(lastReply?.input) == .Input2
+                    expect(automaton?.state.value) == .state0
+                    expect(lastReply?.input) == .input2
                     expect(lastRepliesEvent?.isCompleting) == true
 //                    expect(nextProducerDisposed) == true
                 }

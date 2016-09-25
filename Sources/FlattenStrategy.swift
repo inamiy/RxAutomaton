@@ -12,18 +12,18 @@ public enum FlattenStrategy: Equatable {
     /// input producers will be forwarded immediately to the output producer.
     ///
     /// The resulting producer will complete only when all inputs have completed.
-    case Merge
+    case merge
 
     /// The producers should be concatenated, so that their values are sent in the
     /// order of the producers themselves.
     ///
     /// The resulting producer will complete only when all inputs have completed.
-//    case Concat   // TODO: implement `flatMapConcat`
+//    case concat   // TODO: implement `flatMapConcat`
 
     /// Only the events from the latest input producer should be considered for
     /// the output. Any producers received before that point will be disposed of.
     ///
     /// The resulting producer will complete only when the producer-of-producers and
     /// the latest producer has completed.
-    case Latest
+    case latest
 }

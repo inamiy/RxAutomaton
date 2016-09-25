@@ -13,11 +13,11 @@ import Foundation
 /// (but Swift can't make them as `private case`)
 enum Input: String, CustomStringConvertible
 {
-    case Login = "Login"
-    case LoginOK = "LoginOK"
-    case Logout = "Logout"
-    case ForceLogout = "ForceLogout"
-    case LogoutOK = "LogoutOK"
+    case login
+    case loginOK
+    case logout
+    case forceLogout
+    case logoutOK
 
     var description: String { return self.rawValue }
 }
