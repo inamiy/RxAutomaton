@@ -7,7 +7,7 @@
 //
 
 import RxSwift
-import RxTests
+import RxTest
 import RxAutomaton
 import Quick
 import Nimble
