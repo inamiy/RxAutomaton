@@ -72,10 +72,12 @@ public final class Automaton<State, Input>
         func recurInputProducer(_ inputProducer: Observable<Input>, strategy: FlattenStrategy) -> Observable<Input>
         {
             return Observable<Input>.create { observer in
-                let mappingSignal = inputProducer.withLatestFrom(stateProperty.asObservable()) { $0 }
+                let mappingSignal = inputProducer
+                    .withLatestFrom(stateProperty.asObservable()) { $0 }
                     .map { input, fromState in
                         return (input, fromState, mapping(fromState, input)?.1)
                     }
+                    .shareReplay(1)
 
                 let successSignal = mappingSignal
                     .filterMap { input, fromState, nextProducer in
