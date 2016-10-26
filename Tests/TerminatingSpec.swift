@@ -37,10 +37,11 @@ class TerminatingSpec: QuickSpec
                 signal = signal_
                 observer = observer_
 
-                let sendInput1And2AfterDelay: Observable<MyInput> = [
+
+                let sendInput1And2AfterDelay: Observable<MyInput> = Observable.concat([
                     Observable.just(.input1).delay(1, onScheduler: testScheduler),
                     Observable.just(.input2).delay(1, onScheduler: testScheduler),
-                ].concat()
+                ])
 
                 let mappings: [Automaton.NextMapping] = [
                     .input0 | .state0 => .state1 | sendInput1And2AfterDelay,
