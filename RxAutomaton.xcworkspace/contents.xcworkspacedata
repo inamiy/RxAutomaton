@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "container:"
+      name = "Carthage">
+      <FileRef
+         location = "group:Carthage/Checkouts/RxSwift/Rx.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:Carthage/Checkouts/Quick/Quick.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:Carthage/Checkouts/Nimble/Nimble.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:Carthage/Checkouts/Pulsator/Pulsator.xcodeproj">
+      </FileRef>
+   </Group>
+   <FileRef
+      location = "container:RxAutomaton.xcodeproj">
+   </FileRef>
+</Workspace>
