@@ -56,6 +56,23 @@ public func | <State, Input: Equatable>(input: Input, transition: Transition<Sta
     return { $0 == input } | transition
 }
 
+public func | <State, Input>(inputFunc: @escaping (Input) -> Bool, transition: @escaping (State) -> State) -> Automaton<State, Input>.Mapping
+{
+    return { fromState, input in
+        if inputFunc(input) {
+            return transition(fromState)
+        }
+        else {
+            return nil
+        }
+    }
+}
+
+public func | <State, Input: Equatable>(input: Input, transition: @escaping (State) -> State) -> Automaton<State, Input>.Mapping
+{
+    return { $0 == input } | transition
+}
+
 // MARK: `|` (Automaton.NextMapping constructor)
 
 public func | <State, Input>(mapping: @escaping Automaton<State, Input>.Mapping, nextInputProducer: Observable<Input>) -> Automaton<State, Input>.NextMapping

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1FA0AC461DE8AC2B007F01E0 /* StateFuncMappingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA0AC451DE8AC2B007F01E0 /* StateFuncMappingSpec.swift */; };
 		1FCAB4CD1DC7845200EA6EBF /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FCAB4CC1DC7845200EA6EBF /* RxCocoa.framework */; };
 		1FCAB4CF1DC7845700EA6EBF /* Pulsator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FCAB4CE1DC7845700EA6EBF /* Pulsator.framework */; };
 		1FCAB4D01DC784E400EA6EBF /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4822CC391D61961300783A77 /* RxSwift.framework */; };
@@ -73,6 +74,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1FA0AC451DE8AC2B007F01E0 /* StateFuncMappingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateFuncMappingSpec.swift; sourceTree = "<group>"; };
 		1FCAB4CC1DC7845200EA6EBF /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RxCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FCAB4CE1DC7845700EA6EBF /* Pulsator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Pulsator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FCAB4E21DC7947400EA6EBF /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RxTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -200,8 +202,9 @@
 			children = (
 				4822CC3E1D61969C00783A77 /* Fixtures */,
 				4822CC301D6194FD00783A77 /* MappingSpec.swift */,
-				4822CC2F1D6194FD00783A77 /* AnyMappingSpec.swift */,
 				4822CC311D6194FD00783A77 /* NextMappingSpec.swift */,
+				4822CC2F1D6194FD00783A77 /* AnyMappingSpec.swift */,
+				1FA0AC451DE8AC2B007F01E0 /* StateFuncMappingSpec.swift */,
 				4822CC321D6194FD00783A77 /* StrategyLatestSpec.swift */,
 				4822CC331D6194FD00783A77 /* TerminatingSpec.swift */,
 				488738ED1D61689100BF70F4 /* Info.plist */,
@@ -439,6 +442,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4822CC351D6194FD00783A77 /* MappingSpec.swift in Sources */,
+				1FA0AC461DE8AC2B007F01E0 /* StateFuncMappingSpec.swift in Sources */,
 				4822CC401D61969C00783A77 /* Fixtures.swift in Sources */,
 				487BDE631D619D3200C86902 /* AnyMappingSpec.swift in Sources */,
 				487BDE6C1D61B03700C86902 /* NextMappingSpec.swift in Sources */,
