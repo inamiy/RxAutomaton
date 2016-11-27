@@ -224,9 +224,6 @@ class TerminatingSpec: QuickSpec
                     // `sendInput1And2AfterDelay` will automatically send `.input2` at this point.
                     testScheduler.advanceByInterval(2)
 
-                    print(automaton?.state.value)
-                    print(lastRepliesEvent)
-
                     // Last state & input should change.
                     expect(automaton?.state.value) == .state0
                     expect(lastReply?.input) == .input2
