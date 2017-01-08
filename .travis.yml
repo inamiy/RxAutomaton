@@ -3,10 +3,11 @@ env:
     - LC_CTYPE=en_US.UTF-8
     - XCPROJ="-workspace RxAutomaton.xcworkspace -scheme RxAutomaton"
 
+osx_image: xcode8.2
+
 matrix:
   include:
     - os: osx
-      osx_image: xcode8
       language: objective-c
       script:
         - set -o pipefail
@@ -15,16 +16,14 @@ matrix:
         - JOB=xcodebuild-macOS
 
     - os: osx
-      osx_image: xcode8
       language: objective-c
       script:
         - set -o pipefail
-        - xcodebuild build-for-testing test-without-building -destination 'platform=iOS Simulator,name=iPhone 6s' ENABLE_TESTABILITY=YES $XCPROJ | xcpretty
+        - xcodebuild build-for-testing test-without-building -destination 'platform=iOS Simulator,name=iPhone 6s,OS=9.0' ENABLE_TESTABILITY=YES $XCPROJ | xcpretty
       env:
         - JOB=xcodebuild-iOS
 
     - os: osx
-      osx_image: xcode8
       language: objective-c
       script:
         - set -o pipefail
@@ -33,7 +32,6 @@ matrix:
         - JOB=xcodebuild-tvOS
 
     - os: osx
-      osx_image: xcode8
       language: objective-c
       script:
         - set -o pipefail
@@ -41,8 +39,27 @@ matrix:
       env:
         - JOB=xcodebuild-watchOS
 
-    # - os: osx
-    #   osx_image: xcode8
-    #   script:
-    #     - pod lib lint --allow-warnings
-    #   env: JOB=pod-lint
+    - os: osx
+      script:
+        - pod repo update --silent
+        - pod lib lint --allow-warnings
+      env: JOB=pod-lint
+
+    - os: osx
+      language: generic
+      script:
+        - swift build
+      env:
+        - JOB=swiftpm-mac
+
+    - os: linux
+      language: generic
+      sudo: required
+      dist: trusty
+      before_install:
+        - eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/9f442512a46d7a2af7b850d65a7e9bd31edfb09b/swiftenv-install.sh)"
+      script:
+        - mv .Package.test.swift Package.swift
+        - swift build
+        - swift test
+      env: JOB=swiftpm-linux

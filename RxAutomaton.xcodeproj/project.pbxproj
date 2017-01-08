@@ -75,6 +75,7 @@
 
 /* Begin PBXFileReference section */
 		1FA0AC451DE8AC2B007F01E0 /* StateFuncMappingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateFuncMappingSpec.swift; sourceTree = "<group>"; };
+		1FB0B5251E226FA800052073 /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
 		1FCAB4CC1DC7845200EA6EBF /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RxCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FCAB4CE1DC7845700EA6EBF /* Pulsator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Pulsator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FCAB4E21DC7947400EA6EBF /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RxTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -151,6 +152,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1FB0B5241E226FA800052073 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				1FB0B5251E226FA800052073 /* LinuxMain.swift */,
+				488738EA1D61689100BF70F4 /* RxAutomatonTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 		4822CC3E1D61969C00783A77 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
@@ -165,7 +175,7 @@
 			children = (
 				488743011D61927700BF70F4 /* Configurations */,
 				488738DE1D61689000BF70F4 /* RxAutomaton */,
-				488738EA1D61689100BF70F4 /* RxAutomatonTests */,
+				1FB0B5241E226FA800052073 /* Tests */,
 				48AC076B1D61C962000293FD /* RxAutomatonDemo */,
 				48873F441D616A0800BF70F4 /* Frameworks */,
 				488738DD1D61689000BF70F4 /* Products */,
@@ -209,8 +219,7 @@
 				4822CC331D6194FD00783A77 /* TerminatingSpec.swift */,
 				488738ED1D61689100BF70F4 /* Info.plist */,
 			);
-			name = RxAutomatonTests;
-			path = Tests;
+			path = RxAutomatonTests;
 			sourceTree = "<group>";
 		};
 		48873F441D616A0800BF70F4 /* Frameworks */ = {
@@ -636,7 +645,7 @@
 			baseConfigurationReference = 4887411A1D61923300BF70F4 /* UniversalFramework_Test.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				INFOPLIST_FILE = Tests/Info.plist;
+				INFOPLIST_FILE = Tests/RxAutomatonTests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.inamiy.RxAutomatonTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -647,7 +656,7 @@
 			baseConfigurationReference = 4887411A1D61923300BF70F4 /* UniversalFramework_Test.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				INFOPLIST_FILE = Tests/Info.plist;
+				INFOPLIST_FILE = Tests/RxAutomatonTests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.inamiy.RxAutomatonTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
