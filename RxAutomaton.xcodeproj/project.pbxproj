@@ -14,8 +14,8 @@
 		1FCAB4E31DC7947400EA6EBF /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FCAB4E21DC7947400EA6EBF /* RxTest.framework */; };
 		1FCAB4E61DC794A900EA6EBF /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FCAB4E41DC794A900EA6EBF /* Nimble.framework */; };
 		1FCAB4E71DC794A900EA6EBF /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FCAB4E51DC794A900EA6EBF /* Quick.framework */; };
+		266B1E9B1E41BD9B0034442F /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 266B1E9A1E41BD9B0034442F /* RxSwift.framework */; };
 		4822CC351D6194FD00783A77 /* MappingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4822CC301D6194FD00783A77 /* MappingSpec.swift */; };
-		4822CC3A1D61961300783A77 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4822CC391D61961300783A77 /* RxSwift.framework */; };
 		4822CC401D61969C00783A77 /* Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4822CC3F1D61969C00783A77 /* Fixtures.swift */; };
 		4822CC421D6197A800783A77 /* ToRACHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4822CC411D6197A800783A77 /* ToRACHelper.swift */; };
 		487BDE631D619D3200C86902 /* AnyMappingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4822CC2F1D6194FD00783A77 /* AnyMappingSpec.swift */; };
@@ -81,6 +81,7 @@
 		1FCAB4E21DC7947400EA6EBF /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RxTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FCAB4E41DC794A900EA6EBF /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Nimble.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FCAB4E51DC794A900EA6EBF /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Quick.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		266B1E9A1E41BD9B0034442F /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		4822CC2F1D6194FD00783A77 /* AnyMappingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyMappingSpec.swift; sourceTree = "<group>"; };
 		4822CC301D6194FD00783A77 /* MappingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MappingSpec.swift; sourceTree = "<group>"; };
 		4822CC311D6194FD00783A77 /* NextMappingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NextMappingSpec.swift; sourceTree = "<group>"; };
@@ -123,7 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4822CC3A1D61961300783A77 /* RxSwift.framework in Frameworks */,
+				266B1E9B1E41BD9B0034442F /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,6 +226,7 @@
 		48873F441D616A0800BF70F4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				266B1E9A1E41BD9B0034442F /* RxSwift.framework */,
 				4822CC391D61961300783A77 /* RxSwift.framework */,
 				1FCAB4CC1DC7845200EA6EBF /* RxCocoa.framework */,
 				1FCAB4E21DC7947400EA6EBF /* RxTest.framework */,
@@ -612,6 +614,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.inamiy.RxAutomaton;
@@ -632,6 +638,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.inamiy.RxAutomaton;
