@@ -175,7 +175,7 @@ extension ObservableType {
             case let .error(error):
                 let error = "Binding error to variable: \(error)"
                 #if DEBUG
-                    rxFatalError(error)
+                    fatalError(error)
                 #else
                     print(error)
                 #endif
