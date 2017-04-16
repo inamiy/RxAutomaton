@@ -1,4 +1,4 @@
-github "Quick/Quick"
-github "Quick/Nimble"
+github "Quick/Quick" ~> 1.0
+github "Quick/Nimble" ~> 6.0
 github "mrackwitz/xcconfigs"
-github "shu223/Pulsator"
+github "shu223/Pulsator" ~> 0.3
