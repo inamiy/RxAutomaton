@@ -53,13 +53,24 @@ matrix:
       env:
         - JOB=swiftpm-mac
 
-    - os: linux
-      language: generic
-      sudo: required
-      dist: trusty
-      before_install:
-        - eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/9f442512a46d7a2af7b850d65a7e9bd31edfb09b/swiftenv-install.sh)"
-      script:
-        - swift build
-        - SWIFTPM_TEST=YES swift test
-      env: JOB=swiftpm-linux
+    # 2017/04/16 Temporary Comment-Out:
+    # `swift build` doesn't work on Linux (Swift 3.1).
+    # See https://travis-ci.org/inamiy/RxAutomaton/jobs/222546274
+    #
+    # ```
+    # /home/travis/build/inamiy/RxAutomaton/.build/checkouts/RxSwift.git-77973592786467360/Sources/RxCocoa/URLSession+Rx.swift:144:76: error: 'Error' is not convertible to 'NSError'; did you mean to use 'as!' to force downcast?
+    #                 print(convertResponseToString(response, error.map { $0 as NSError }, interval))
+    #                                                                     ~~~^~~~~~~~~~
+    #                                                                       as!
+    # ```
+
+    #- os: linux
+    #  language: generic
+    #  sudo: required
+    #  dist: trusty
+    #  before_install:
+    #    - eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/#raw/9f442512a46d7a2af7b850d65a7e9bd31edfb09b/swiftenv-install.sh)"
+    #  script:
+    #    - swift build
+    #    - SWIFTPM_TEST=YES swift test
+    #  env: JOB=swiftpm-linux
