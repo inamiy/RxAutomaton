@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "RxAutomaton"
-  s.version      = "0.2.0"
+  s.version      = "0.2.1"
   s.summary      = "RxSwift + State Machine, inspired by Redux and Elm."
   s.homepage     = "https://github.com/inamiy/RxAutomaton"
   s.license      = { :type => "MIT", :file => "LICENSE" }
