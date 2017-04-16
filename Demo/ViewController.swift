@@ -59,7 +59,7 @@ class AutomatonViewController: UIViewController
         let canForceLogout: (State) -> Bool = [.loggingIn, .loggedIn].contains
 
         /// Transition mapping.
-        let mappings: [Automaton<State, Input>.NextMapping] = [
+        let mappings: [Automaton<State, Input>.EffectMapping] = [
 
           /*  Input   |   fromState => toState     |      Effect       */
           /* ----------------------------------------------------------*/

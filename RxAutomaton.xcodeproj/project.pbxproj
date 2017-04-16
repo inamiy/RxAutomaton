@@ -20,8 +20,8 @@
 		4822CC421D6197A800783A77 /* ToRACHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4822CC411D6197A800783A77 /* ToRACHelper.swift */; };
 		487BDE631D619D3200C86902 /* AnyMappingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4822CC2F1D6194FD00783A77 /* AnyMappingSpec.swift */; };
 		487BDE641D619D4500C86902 /* TerminatingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4822CC331D6194FD00783A77 /* TerminatingSpec.swift */; };
-		487BDE6B1D61AFF300C86902 /* StrategyLatestSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4822CC321D6194FD00783A77 /* StrategyLatestSpec.swift */; };
-		487BDE6C1D61B03700C86902 /* NextMappingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4822CC311D6194FD00783A77 /* NextMappingSpec.swift */; };
+		487BDE6B1D61AFF300C86902 /* EffectMappingLatestSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4822CC321D6194FD00783A77 /* EffectMappingLatestSpec.swift */; };
+		487BDE6C1D61B03700C86902 /* EffectMappingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4822CC311D6194FD00783A77 /* EffectMappingSpec.swift */; };
 		488738E01D61689000BF70F4 /* RxAutomaton.h in Headers */ = {isa = PBXBuildFile; fileRef = 488738DF1D61689000BF70F4 /* RxAutomaton.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		488738E71D61689100BF70F4 /* RxAutomaton.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 488738DC1D61689000BF70F4 /* RxAutomaton.framework */; };
 		488738F71D6168A600BF70F4 /* Automaton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488738F61D6168A600BF70F4 /* Automaton.swift */; };
@@ -83,8 +83,8 @@
 		1FCAB4E51DC794A900EA6EBF /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Quick.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4822CC2F1D6194FD00783A77 /* AnyMappingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyMappingSpec.swift; sourceTree = "<group>"; };
 		4822CC301D6194FD00783A77 /* MappingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MappingSpec.swift; sourceTree = "<group>"; };
-		4822CC311D6194FD00783A77 /* NextMappingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NextMappingSpec.swift; sourceTree = "<group>"; };
-		4822CC321D6194FD00783A77 /* StrategyLatestSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StrategyLatestSpec.swift; sourceTree = "<group>"; };
+		4822CC311D6194FD00783A77 /* EffectMappingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EffectMappingSpec.swift; sourceTree = "<group>"; };
+		4822CC321D6194FD00783A77 /* EffectMappingLatestSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EffectMappingLatestSpec.swift; sourceTree = "<group>"; };
 		4822CC331D6194FD00783A77 /* TerminatingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TerminatingSpec.swift; sourceTree = "<group>"; };
 		4822CC391D61961300783A77 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RxSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4822CC3F1D61969C00783A77 /* Fixtures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fixtures.swift; sourceTree = "<group>"; };
@@ -212,10 +212,10 @@
 			children = (
 				4822CC3E1D61969C00783A77 /* Fixtures */,
 				4822CC301D6194FD00783A77 /* MappingSpec.swift */,
-				4822CC311D6194FD00783A77 /* NextMappingSpec.swift */,
+				4822CC311D6194FD00783A77 /* EffectMappingSpec.swift */,
 				4822CC2F1D6194FD00783A77 /* AnyMappingSpec.swift */,
 				1FA0AC451DE8AC2B007F01E0 /* StateFuncMappingSpec.swift */,
-				4822CC321D6194FD00783A77 /* StrategyLatestSpec.swift */,
+				4822CC321D6194FD00783A77 /* EffectMappingLatestSpec.swift */,
 				4822CC331D6194FD00783A77 /* TerminatingSpec.swift */,
 				488738ED1D61689100BF70F4 /* Info.plist */,
 			);
@@ -454,9 +454,9 @@
 				1FA0AC461DE8AC2B007F01E0 /* StateFuncMappingSpec.swift in Sources */,
 				4822CC401D61969C00783A77 /* Fixtures.swift in Sources */,
 				487BDE631D619D3200C86902 /* AnyMappingSpec.swift in Sources */,
-				487BDE6C1D61B03700C86902 /* NextMappingSpec.swift in Sources */,
+				487BDE6C1D61B03700C86902 /* EffectMappingSpec.swift in Sources */,
 				487BDE641D619D4500C86902 /* TerminatingSpec.swift in Sources */,
-				487BDE6B1D61AFF300C86902 /* StrategyLatestSpec.swift in Sources */,
+				487BDE6B1D61AFF300C86902 /* EffectMappingLatestSpec.swift in Sources */,
 				4822CC421D6197A800783A77 /* ToRACHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -11,19 +11,19 @@ import RxAutomaton
 import Quick
 import Nimble
 
-/// NextMapping tests with `strategy = .Latest`.
-class NextMappingLatestSpec: QuickSpec
+/// EffectMapping tests with `strategy = .latest`.
+class EffectMappingLatestSpec: QuickSpec
 {
     override func spec()
     {
         typealias Automaton = RxAutomaton.Automaton<AuthState, AuthInput>
-        typealias NextMapping = Automaton.NextMapping
+        typealias EffectMapping = Automaton.EffectMapping
 
         let (signal, observer) = Observable<AuthInput>.pipe()
         var automaton: Automaton?
         var lastReply: Reply<AuthState, AuthInput>?
 
-        describe("strategy = `.Latest`") {
+        describe("strategy = `.latest`") {
 
             var testScheduler: TestScheduler!
 
@@ -40,7 +40,7 @@ class NextMappingLatestSpec: QuickSpec
                     Observable.just(AuthInput.logoutOK)
                         .delay(1, onScheduler: testScheduler)
 
-                let mappings: [Automaton.NextMapping] = [
+                let mappings: [Automaton.EffectMapping] = [
                     .login    | .loggedOut  => .loggingIn  | loginOKProducer,
                     .loginOK  | .loggingIn  => .loggedIn   | .empty(),
                     .logout   | .loggedIn   => .loggingOut | logoutOKProducer,
@@ -57,7 +57,7 @@ class NextMappingLatestSpec: QuickSpec
                 lastReply = nil
             }
 
-            it("`strategy = .Latest` should not interrupt inner next-producers when transition fails") {
+            it("`strategy = .latest` should not interrupt inner effects when transition fails") {
                 expect(automaton?.state.value) == .loggedOut
                 expect(lastReply).to(beNil())
 

@@ -5,9 +5,9 @@ import Quick
 
 Quick.QCKMain([
     MappingSpec.self,
-    NextMappingSpec.self,
+    EffectMappingSpec.self,
     AnyMappingSpec.self,
     StateFuncMappingSpec.self,
-    NextMappingLatestSpec.self,
+    EffectMappingLatestSpec.self,
     TerminatingSpec.self
 ])

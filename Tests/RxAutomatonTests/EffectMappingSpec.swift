@@ -1,5 +1,5 @@
 //
-//  NextMappingSpec.swift
+//  EffectMappingSpec.swift
 //  RxAutomaton
 //
 //  Created by Yasuhiro Inami on 2016-08-15.
@@ -14,19 +14,19 @@ import Nimble
 
 /// Tests for `(State, Input) -> (State, Output)?` mapping
 /// where `Output = Observable<Input>`.
-class NextMappingSpec: QuickSpec
+class EffectMappingSpec: QuickSpec
 {
     override func spec()
     {
         typealias Automaton = RxAutomaton.Automaton<AuthState, AuthInput>
-        typealias NextMapping = Automaton.NextMapping
+        typealias EffectMapping = Automaton.EffectMapping
 
         let (signal, observer) = Observable<AuthInput>.pipe()
         var automaton: Automaton?
         var lastReply: Reply<AuthState, AuthInput>?
         var testScheduler: TestScheduler!
 
-        describe("Syntax-sugar NextMapping") {
+        describe("Syntax-sugar EffectMapping") {
 
             beforeEach {
                 testScheduler = TestScheduler()
@@ -41,7 +41,7 @@ class NextMappingSpec: QuickSpec
                     Observable.just(AuthInput.logoutOK)
                         .delay(1, onScheduler: testScheduler)
 
-                let mappings: [Automaton.NextMapping] = [
+                let mappings: [Automaton.EffectMapping] = [
                     .login    | .loggedOut  => .loggingIn  | loginOKProducer,
                     .loginOK  | .loggingIn  => .loggedIn   | .empty(),
                     .logout   | .loggedIn   => .loggingOut | logoutOKProducer,
@@ -95,7 +95,7 @@ class NextMappingSpec: QuickSpec
 
         }
 
-        describe("Func-based NextMapping") {
+        describe("Func-based EffectMapping") {
 
             beforeEach {
                 testScheduler = TestScheduler()
@@ -110,7 +110,7 @@ class NextMappingSpec: QuickSpec
                     Observable.just(AuthInput.logoutOK)
                         .delay(1, onScheduler: testScheduler)
 
-                let mapping: NextMapping = { fromState, input in
+                let mapping: EffectMapping = { fromState, input in
                     switch (fromState, input) {
                         case (.loggedOut, .login):
                             return (.loggingIn, loginOKProducer)
@@ -173,7 +173,7 @@ class NextMappingSpec: QuickSpec
         }
 
         /// https://github.com/inamiy/RxAutomaton/issues/3
-        describe("Next-producer should be called only once per input") {
+        describe("Additional effect should be called only once per input") {
 
             var effectCallCount = 0
 
@@ -192,12 +192,12 @@ class NextMappingSpec: QuickSpec
                         })
                     }
 
-                let mappings: [Automaton.NextMapping] = [
+                let mappings: [Automaton.EffectMapping] = [
                     .login    | .loggedOut  => .loggingIn  | loginOKProducer,
                     .loginOK  | .loggingIn  => .loggedIn   | .empty(),
                 ]
 
-                // strategy = `.Merge`
+                // strategy = `.merge`
                 automaton = Automaton(state: .loggedOut, input: signal, mapping: reduce(mappings), strategy: .merge)
 
                 _ = automaton?.replies.observeValues { reply in

@@ -35,7 +35,7 @@ let forcelogoutOKProducer = /* do something more special, ..., and send `Input.l
 let canForceLogout: State -> Bool = [.loggingIn, .loggedIn].contains
 
 // 2. Setup state-transition mappings.
-let mappings: [Automaton<State, Input>.NextMapping] = [
+let mappings: [Automaton<State, Input>.EffectMapping] = [
 
   /*  Input   |   fromState => toState     |      Effect       */
   /* ----------------------------------------------------------*/
