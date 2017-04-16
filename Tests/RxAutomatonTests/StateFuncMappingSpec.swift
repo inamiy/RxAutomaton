@@ -20,13 +20,13 @@ class StateFuncMappingSpec: QuickSpec
         describe("State-change function mapping") {
 
             typealias Automaton = RxAutomaton.Automaton<CountState, CountInput>
-            typealias NextMapping = Automaton.NextMapping
+            typealias EffectMapping = Automaton.EffectMapping
 
             let (signal, observer) = Observable<CountInput>.pipe()
             var automaton: Automaton?
 
             beforeEach {
-                let mappings: [Automaton.NextMapping] = [
+                let mappings: [Automaton.EffectMapping] = [
                     .increment | { $0 + 1 } | .empty(),
                     .decrement | { $0 - 1 } | .empty(),
                     ]

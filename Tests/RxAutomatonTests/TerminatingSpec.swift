@@ -22,8 +22,8 @@ class TerminatingSpec: QuickSpec
         var lastReply: Reply<MyState, MyInput>?
         var lastRepliesEvent: Event<Reply<MyState, MyInput>>?
 
-        /// Flag for internal nextProducer `sendInput1And2AfterDelay` disposed.
-//        var nextProducerDisposed: Bool?
+        /// Flag for internal effect `sendInput1And2AfterDelay` disposed.
+//        var effectDisposed: Bool?
 
         var signal: Observable<MyInput>!
         var observer: AnyObserver<MyInput>!
@@ -43,7 +43,7 @@ class TerminatingSpec: QuickSpec
                     Observable.just(.input2).delay(1, onScheduler: testScheduler),
                 ])
 
-                let mappings: [Automaton.NextMapping] = [
+                let mappings: [Automaton.EffectMapping] = [
                     .input0 | .state0 => .state1 | sendInput1And2AfterDelay,
                     .input1 | .state1 => .state2 | .empty(),
                     .input2 | .state2 => .state0 | .empty()
@@ -62,7 +62,7 @@ class TerminatingSpec: QuickSpec
 
                 lastReply = nil
                 lastRepliesEvent = nil
-//                nextProducerDisposed = false
+//                effectDisposed = false
             }
 
             describe("Automaton deinit") {
@@ -84,14 +84,14 @@ class TerminatingSpec: QuickSpec
                     expect(automaton?.state.value) == .state0
                     expect(lastReply).to(beNil())
                     expect(lastRepliesEvent).to(beNil())
-//                    expect(nextProducerDisposed) == false
+//                    expect(effectDisposed) == false
 
                     observer.send(next: .input0)
 
                     expect(automaton?.state.value) == .state1
                     expect(lastReply?.input) == .input0
                     expect(lastRepliesEvent?.isTerminating) == false
-//                    expect(nextProducerDisposed) == false
+//                    expect(effectDisposed) == false
 
                     // `sendInput1And2AfterDelay` will automatically send `.input1` at this point
                     testScheduler.advanceByInterval(1)
@@ -99,7 +99,7 @@ class TerminatingSpec: QuickSpec
                     expect(automaton?.state.value) == .state2
                     expect(lastReply?.input) == .input1
                     expect(lastRepliesEvent?.isTerminating) == false
-//                    expect(nextProducerDisposed) == false
+//                    expect(effectDisposed) == false
 
                     weak var weakAutomaton = automaton
                     automaton = nil
@@ -107,7 +107,7 @@ class TerminatingSpec: QuickSpec
                     expect(weakAutomaton).to(beNil())
                     expect(lastReply?.input) == .input1
                     expect(lastRepliesEvent?.isCompleting) == true  // isCompleting
-//                    expect(nextProducerDisposed) == true
+//                    expect(effectDisposed) == true
 
                     // If `sendInput1And2AfterDelay` is still alive, it will send `.input2` at this point,
                     // but it's already interrupted because `automaton` is deinited.
@@ -140,14 +140,14 @@ class TerminatingSpec: QuickSpec
 //                    expect(automaton).toNot(beNil())
 //                    expect(lastReply).to(beNil())
 //                    expect(lastRepliesEvent).to(beNil())
-//                    expect(nextProducerDisposed) == false
+//                    expect(effectDisposed) == false
 //
 //                    observer.send(next: .input0)
 //
 //                    expect(automaton?.state.value) == .state1
 //                    expect(lastReply?.input) == .input0
 //                    expect(lastRepliesEvent?.isTerminating) == false
-//                    expect(nextProducerDisposed) == false
+//                    expect(effectDisposed) == false
 //
 //                    // `sendInput1And2AfterDelay` will automatically send `.input1` at this point
 //                    testScheduler.advanceByInterval(1)
@@ -155,14 +155,14 @@ class TerminatingSpec: QuickSpec
 //                    expect(automaton?.state.value) == .state2
 //                    expect(lastReply?.input) == .input1
 //                    expect(lastRepliesEvent?.isTerminating) == false
-//                    expect(nextProducerDisposed) == false
+//                    expect(effectDisposed) == false
 //
 //                    observer.sendInterrupted()
 //
 //                    expect(automaton?.state.value) == .state2
 //                    expect(lastReply?.input) == .input1
 ////                    expect(lastRepliesEvent?.isInterrupting) == true    // interrupting, not isCompleting
-//                    expect(nextProducerDisposed) == true
+//                    expect(effectDisposed) == true
 //
 //                    // If `sendInput1And2AfterDelay` is still alive, it will send `.input2` at this point,
 //                    // but it's already interrupted because of `sendInterrupted`.
@@ -176,7 +176,7 @@ class TerminatingSpec: QuickSpec
 //            }
 
             // Unlike `automaton.deinit` or `inputSignal` sending `.Interrupted`,
-            // inputSignal` sending `.Completed` does NOT cancel internal nextProducer,
+            // inputSignal` sending `.Completed` does NOT cancel internal effect,
             // i.e. `sendInput1And2AfterDelay`.
             describe("inputSignal sendCompleted") {
 
@@ -196,14 +196,14 @@ class TerminatingSpec: QuickSpec
                     expect(automaton?.state.value) == .state0
                     expect(lastReply).to(beNil())
                     expect(lastRepliesEvent).to(beNil())
-//                    expect(nextProducerDisposed) == false
+//                    expect(effectDisposed) == false
 
                     observer.send(next: .input0)
 
                     expect(automaton?.state.value) == .state1
                     expect(lastReply?.input) == .input0
                     expect(lastRepliesEvent?.isTerminating) == false
-//                    expect(nextProducerDisposed) == false
+//                    expect(effectDisposed) == false
 
                     // `sendInput1And2AfterDelay` will automatically send `.input1` at this point.
                     testScheduler.advanceByInterval(1)
@@ -211,7 +211,7 @@ class TerminatingSpec: QuickSpec
                     expect(automaton?.state.value) == .state2
                     expect(lastReply?.input) == .input1
                     expect(lastRepliesEvent?.isTerminating) == false
-//                    expect(nextProducerDisposed) == false
+//                    expect(effectDisposed) == false
 
                     observer.sendCompleted()
 
@@ -219,7 +219,7 @@ class TerminatingSpec: QuickSpec
                     expect(automaton?.state.value) == .state2
                     expect(lastReply?.input) == .input1
                     expect(lastRepliesEvent?.isTerminating) == false
-//                    expect(nextProducerDisposed) == false
+//                    expect(effectDisposed) == false
 
                     // `sendInput1And2AfterDelay` will automatically send `.input2` at this point.
                     testScheduler.advanceByInterval(2)
@@ -228,7 +228,7 @@ class TerminatingSpec: QuickSpec
                     expect(automaton?.state.value) == .state0
                     expect(lastReply?.input) == .input2
                     expect(lastRepliesEvent?.isCompleting) == true
-//                    expect(nextProducerDisposed) == true
+//                    expect(effectDisposed) == true
                 }
 
             }
