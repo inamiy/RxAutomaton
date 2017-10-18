@@ -48,6 +48,7 @@ public final class Automaton<State, Input>
     ///
     public convenience init(state initialState: State, input inputSignal: Observable<Input>, mapping: @escaping Mapping)
     {
+
         self.init(state: initialState, input: inputSignal, mapping: _compose(_toEffectMapping, mapping))
     }
 
@@ -73,12 +74,18 @@ public final class Automaton<State, Input>
         func recurInputProducer(_ inputProducer: Observable<Input>, strategy: FlattenStrategy) -> Observable<Input>
         {
             return Observable<Input>.create { observer in
-                let mappingSignal = inputProducer
-                    .withLatestFrom(stateProperty.asObservable()) { $0 }
-                    .map { input, fromState in
-                        return (input, fromState, mapping(fromState, input)?.1)
-                    }
-                    .shareReplay(1)
+                let mappingSignal = inputProducer.withLatestFrom(stateProperty.asObservable(), resultSelector: { (input, state) -> (Input, State) in
+                    return (input, state)
+                }).map { input, fromState in
+                    return (input, fromState, mapping(fromState, input)?.1)
+                }
+                .share(replay:1)
+//                let mappingSignal = inputProducer
+//                    .withLatestFrom(stateProperty.asObservable()) { $0 }
+//                    .map { input, fromState in
+//                        return (input, fromState, mapping(fromState, input)?.1)
+//                    }
+//                    .shareReplay(1)
 
                 let successSignal = mappingSignal
                     .filterMap { input, fromState, effect in
@@ -101,7 +108,9 @@ public final class Automaton<State, Input>
         }
 
         let replySignal = recurInputProducer(inputSignal, strategy: strategy)
-            .withLatestFrom(stateProperty.asObservable()) { $0 }
+            .withLatestFrom(stateProperty.asObservable()) { (input, state) -> (Input, State) in
+                return (input, state)
+            }
             .flatMap(.merge) { input, fromState -> Observable<Reply<State, Input>> in
                 if let (toState, _) = mapping(fromState, input) {
                     return .just(.success(input, fromState, toState))
@@ -110,7 +119,7 @@ public final class Automaton<State, Input>
                     return .just(.failure(input, fromState))
                 }
             }
-            .shareReplay(1)
+            .share(replay: 1)
 
         replySignal
             .flatMap(.merge) { reply -> Observable<State> in
@@ -122,11 +131,11 @@ public final class Automaton<State, Input>
                 }
             }
             .bindTo(stateProperty)
-            .addDisposableTo(_disposeBag)
+            .disposed(by: _disposeBag)
 
         replySignal
             .subscribe(self._replyObserver)
-            .addDisposableTo(_disposeBag)
+            .disposed(by: _disposeBag)
     }
 
     deinit
@@ -137,9 +146,13 @@ public final class Automaton<State, Input>
 
 // MARK: Private
 
-private func _compose<A, B, C>(_ g: @escaping (B) -> C, _ f: @escaping (A) -> B) -> (A) -> C
+//private func _compose<A, B, C>(_ g: @escaping ((B) -> C), _ f: @escaping ((A) -> B)) -> ((A) -> C)
+//{
+//    return { x in g(f(x)) }
+//}
+private func _compose<A, B, C, D>(_ g: @escaping ((B) -> C), _ f: @escaping ((A, D) -> B)) -> ((A, D) -> C)
 {
-    return { x in g(f(x)) }
+    return { x, y in g(f(x, y)) }
 }
 
 private func _toEffectMapping<State, Input>(toState: State?) -> (State, Observable<Input>)?
