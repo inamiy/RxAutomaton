@@ -38,7 +38,10 @@ class AutomatonViewController: UIViewController
         {
             return Observable<Int>.interval(interval, scheduler: MainScheduler.instance)
                 .take(count)
-                .scan(0) { $0.0 + 1 }
+                .scan(0, accumulator: { (x, _) -> Int in
+                    return x + 1
+                })
+//                .scan(0) { $0.0 + 1 }
                 .startWith(0)
                 .map {
                     switch $0 {
