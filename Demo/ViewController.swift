@@ -38,7 +38,7 @@ class AutomatonViewController: UIViewController
         {
             return Observable<Int>.interval(interval, scheduler: MainScheduler.instance)
                 .take(count)
-                .scan(0) { $0.0 + 1 }
+                .scan(0) { x, _ in x + 1 }
                 .startWith(0)
                 .map {
                     switch $0 {
@@ -80,34 +80,34 @@ class AutomatonViewController: UIViewController
             .subscribe(onNext: { reply in
                 print("received reply = \(reply)")
             })
-            .addDisposableTo(_disposeBag)
+            .disposed(by: _disposeBag)
 
         automaton.state.asObservable()
             .subscribe(onNext: { state in
                 print("current state = \(state)")
             })
-            .addDisposableTo(_disposeBag)
+            .disposed(by: _disposeBag)
 
         // Setup buttons.
         do {
             self.loginButton?.rx.tap
                 .subscribe(onNext: { _ in inputObserver.onNext(.login) })
-                .addDisposableTo(_disposeBag)
+                .disposed(by: _disposeBag)
 
             self.logoutButton?.rx.tap
                 .subscribe(onNext: { _ in inputObserver.onNext(.logout) })
-                .addDisposableTo(_disposeBag)
+                .disposed(by: _disposeBag)
 
             self.forceLogoutButton?.rx.tap
                 .subscribe(onNext: { _ in inputObserver.onNext(.forceLogout) })
-                .addDisposableTo(_disposeBag)
+                .disposed(by: _disposeBag)
         }
 
         // Setup label.
         do {
             textSignal
-                .bindTo(self.label!.rx.text)
-                .addDisposableTo(_disposeBag)
+                .bind(to: self.label!.rx.text)
+                .disposed(by: _disposeBag)
         }
 
         // Setup Pulsator.
@@ -121,19 +121,19 @@ class AutomatonViewController: UIViewController
                 .map(_pulsatorColor)
                 .map { $0.cgColor }
                 .drive(pulsator.rx_backgroundColor)
-                .addDisposableTo(_disposeBag)
+                .disposed(by: _disposeBag)
 
             automaton.state.asDriver()
                 .map(_pulsatorPosition)
                 .drive(pulsator.rx_position)
-                .addDisposableTo(_disposeBag)
+                .disposed(by: _disposeBag)
 
             // Overwrite the pulsator color to red if `.forceLogout` succeeded.
             automaton.replies
                 .filter { $0.toState != nil && $0.input == .forceLogout }
                 .map { _ in UIColor.red.cgColor }
-                .bindTo(pulsator.rx_backgroundColor)
-                .addDisposableTo(_disposeBag)
+                .bind(to: pulsator.rx_backgroundColor)
+                .disposed(by: _disposeBag)
         }
 
     }

@@ -15,19 +15,19 @@ import RxCocoa
 extension CALayer
 {
     public var rx_position: AnyObserver<CGPoint> {
-        return UIBindingObserver(UIElement: self) { layer, value in
+        return Binder(self) { layer, value in
             layer.position = value
         }.asObserver()
     }
 
     public var rx_hidden: AnyObserver<Bool> {
-        return UIBindingObserver(UIElement: self) { layer, value in
+        return Binder(self) { layer, value in
             layer.isHidden = value
         }.asObserver()
     }
 
     public var rx_backgroundColor: AnyObserver<CGColor?> {
-        return UIBindingObserver(UIElement: self) { layer, value in
+        return Binder(self) { layer, value in
             layer.backgroundColor = value
         }.asObserver()
     }

@@ -74,11 +74,11 @@ public final class Automaton<State, Input>
         {
             return Observable<Input>.create { observer in
                 let mappingSignal = inputProducer
-                    .withLatestFrom(stateProperty.asObservable()) { $0 }
+                    .withLatestFrom(stateProperty.asObservable()) { ($0, $1) }
                     .map { input, fromState in
                         return (input, fromState, mapping(fromState, input)?.1)
                     }
-                    .shareReplay(1)
+                    .share(replay: 1)
 
                 let successSignal = mappingSignal
                     .filterMap { input, fromState, effect in
@@ -101,7 +101,7 @@ public final class Automaton<State, Input>
         }
 
         let replySignal = recurInputProducer(inputSignal, strategy: strategy)
-            .withLatestFrom(stateProperty.asObservable()) { $0 }
+            .withLatestFrom(stateProperty.asObservable()) { ($0, $1) }
             .flatMap(.merge) { input, fromState -> Observable<Reply<State, Input>> in
                 if let (toState, _) = mapping(fromState, input) {
                     return .just(.success(input, fromState, toState))
@@ -110,7 +110,7 @@ public final class Automaton<State, Input>
                     return .just(.failure(input, fromState))
                 }
             }
-            .shareReplay(1)
+            .share(replay: 1)
 
         replySignal
             .flatMap(.merge) { reply -> Observable<State> in
@@ -122,11 +122,11 @@ public final class Automaton<State, Input>
                 }
             }
             .bindTo(stateProperty)
-            .addDisposableTo(_disposeBag)
+            .disposed(by: _disposeBag)
 
         replySignal
             .subscribe(self._replyObserver)
-            .addDisposableTo(_disposeBag)
+            .disposed(by: _disposeBag)
     }
 
     deinit
@@ -137,9 +137,9 @@ public final class Automaton<State, Input>
 
 // MARK: Private
 
-private func _compose<A, B, C>(_ g: @escaping (B) -> C, _ f: @escaping (A) -> B) -> (A) -> C
+private func _compose<A, B, C, D>(_ g: @escaping ((C) -> D), _ f: @escaping ((A, B) -> C)) -> ((A, B) -> D)
 {
-    return { x in g(f(x)) }
+    return { x, y in g(f(x, y)) }
 }
 
 private func _toEffectMapping<State, Input>(toState: State?) -> (State, Observable<Input>)?
