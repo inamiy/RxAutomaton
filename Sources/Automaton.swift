@@ -78,7 +78,7 @@ public final class Automaton<State, Input>
                     .map { input, fromState in
                         return (input, fromState, mapping(fromState, input)?.1)
                     }
-                    .share(replay: 1)
+                    .share(replay: 1, scope: .forever)
 
                 let successSignal = mappingSignal
                     .filterMap { input, fromState, effect in
@@ -110,7 +110,7 @@ public final class Automaton<State, Input>
                     return .just(.failure(input, fromState))
                 }
             }
-            .share(replay: 1)
+            .share(replay: 1, scope: .forever)
 
         replySignal
             .flatMap(.merge) { reply -> Observable<State> in

@@ -94,7 +94,32 @@ class EffectMappingSpec: QuickSpec
             }
 
         }
-
+        
+        describe("Edge Invocation") {
+            var subscriptionsCount = 0
+            
+            beforeEach {
+                subscriptionsCount = 0
+                
+                // To reproduce the bug we need a plain cold observable
+                let loginOKProducer = Observable.just(AuthInput.loginOK)
+                    .do(onSubscribe: { subscriptionsCount += 1 })
+                
+                let mappings: [Automaton.EffectMapping] = [
+                    .login    | .loggedOut  => .loggingIn  | loginOKProducer
+                ]
+                
+                automaton = Automaton(state: .loggedOut, input: signal, mapping: reduce(mappings), strategy: .merge)
+            }
+            
+            describe("loggedOut  => .loggingIn") {
+                it("subscribes to testableLoginOKProducer only once") {
+                    observer.onNext(.login)
+                    expect(subscriptionsCount) == 1
+                }
+            }
+        }
+        
         describe("Func-based EffectMapping") {
 
             beforeEach {
