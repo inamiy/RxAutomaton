@@ -22,6 +22,6 @@ let package = Package(
             path: "Sources"),
         .testTarget(
             name: "RxAutomatonTests",
-            dependencies: ["RxAutomaton", "Quick", "Nimble"]),
+            dependencies: ["RxAutomaton", "RxTest", "Quick", "Nimble"]),
     ]
 )
