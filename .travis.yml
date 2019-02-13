@@ -3,7 +3,7 @@ env:
     - LC_CTYPE=en_US.UTF-8
     - XCPROJ="-workspace RxAutomaton.xcworkspace -scheme RxAutomaton"
 
-osx_image: xcode9
+osx_image: xcode10.1
 
 matrix:
   include:
@@ -19,7 +19,7 @@ matrix:
       language: objective-c
       script:
         - set -o pipefail
-        - xcodebuild build-for-testing test-without-building -destination 'platform=iOS Simulator,name=iPhone 6s,OS=9.0' ENABLE_TESTABILITY=YES $XCPROJ | xcpretty
+        - xcodebuild build-for-testing test-without-building -destination 'platform=iOS Simulator,name=iPhone XS' ENABLE_TESTABILITY=YES $XCPROJ | xcpretty
       env:
         - JOB=xcodebuild-iOS
 
@@ -27,7 +27,7 @@ matrix:
       language: objective-c
       script:
         - set -o pipefail
-        - xcodebuild build-for-testing test-without-building -destination 'platform=tvOS Simulator,name=Apple TV 1080p' ENABLE_TESTABILITY=YES $XCPROJ | xcpretty
+        - xcodebuild build-for-testing test-without-building -destination 'platform=tvOS Simulator,name=Apple TV 4K' ENABLE_TESTABILITY=YES $XCPROJ | xcpretty
       env:
         - JOB=xcodebuild-tvOS
 
@@ -35,21 +35,23 @@ matrix:
       language: objective-c
       script:
         - set -o pipefail
-        - xcodebuild build -destination 'platform=watchOS Simulator,name=Apple Watch - 38mm,OS=2.2' $XCPROJ | xcpretty
+        - xcodebuild build -destination 'platform=watchOS Simulator,name=Apple Watch Series 4 - 44mm' $XCPROJ | xcpretty
       env:
         - JOB=xcodebuild-watchOS
 
-    - os: osx
-      script:
-        - pod repo update --silent
-        # - pod lib lint --allow-warnings
-      env: JOB=pod-lint
+    # Comment-Out: Unknown CI failure (unreproducible in local)
+    # https://travis-ci.org/inamiy/ReactiveAutomaton/jobs/492530708
+    # - os: osx
+    #   script:
+    #     - pod repo update --silent
+    #     - pod lib lint --allow-warnings
+    #   env: JOB=pod-lint
 
     - os: osx
       language: generic
       script:
         - swift build
-        #- SWIFTPM_TEST=YES swift test  # macOS not supported yet
+        - swift test
       env:
         - JOB=swiftpm-mac
 
