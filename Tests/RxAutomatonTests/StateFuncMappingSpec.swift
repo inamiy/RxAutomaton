@@ -26,10 +26,12 @@ class StateFuncMappingSpec: QuickSpec
             var automaton: Automaton?
 
             beforeEach {
-                let mappings: [Automaton.EffectMapping] = [
-                    .increment | { $0 + 1 } | .empty(),
-                    .decrement | { $0 - 1 } | .empty(),
+                var mappings: [Automaton.EffectMapping] = [
+                    .increment | { $0 + 1 } | .empty()
+                    // Comment-Out: Type inference is super slow in Swift 4.2... (use `+=` instead)
+//                    .decrement | { $0 - 1 } | .empty()
                     ]
+                mappings += [ .decrement | { $0 - 1 } | .empty() ]
 
                 // strategy = `.merge`
                 automaton = Automaton(state: 0, input: signal, mapping: reduce(mappings), strategy: .merge)
