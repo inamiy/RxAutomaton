@@ -37,13 +37,12 @@ let canForceLogout: State -> Bool = [.loggingIn, .loggedIn].contains
 // 2. Setup state-transition mappings.
 let mappings: [Automaton<State, Input>.EffectMapping] = [
 
-  /*  Input   |   fromState => toState     |      Effect       */
-  /* ----------------------------------------------------------*/
-    .login    | .loggedOut  => .loggingIn  | loginOKProducer,
-    .loginOK  | .loggingIn  => .loggedIn   | .empty(),
-    .logout   | .loggedIn   => .loggingOut | logoutOKProducer,
-    .logoutOK | .loggingOut => .loggedOut  | .empty(),
-
+  /*  Input      |   fromState => toState        |      Effect       */
+  /* ----------------------------------------------------------------*/
+    .login       | .loggedOut  => .loggingIn     | loginOKProducer,
+    .loginOK     | .loggingIn  => .loggedIn      | .empty(),
+    .logout      | .loggedIn   => .loggingOut    | logoutOKProducer,
+    .logoutOK    | .loggingOut => .loggedOut     | .empty(),
     .forceLogout | canForceLogout => .loggingOut | forceLogoutOKProducer
 ]
 
