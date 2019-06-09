@@ -210,7 +210,7 @@ class EffectMappingSpec: QuickSpec
                 let loginOKProducer =
                     Observable<AuthInput>.create { observer in
                         effectCallCount += 1
-                        return testScheduler.scheduleRelative((), dueTime: 0.1, action: { () -> Disposable in
+                        return testScheduler.scheduleRelative((), dueTime: .milliseconds(100), action: { () -> Disposable in
                             observer.send(next: .loginOK)
                             observer.sendCompleted()
                             return Disposables.create()
