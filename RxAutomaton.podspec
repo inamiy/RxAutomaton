@@ -14,5 +14,5 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/inamiy/RxAutomaton.git", :tag => "#{s.version}" }
   s.source_files  = "Sources/**/*.swift"
 
-  s.dependency "RxSwift", "~> 4.0"
+  s.dependency "RxSwift", "~> 5.0"
 end
