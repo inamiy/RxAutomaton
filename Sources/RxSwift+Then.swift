@@ -12,7 +12,7 @@ extension ObservableType {
 
     /// From ReactiveCocoa (naive implementation).
     public func then<E2, O: ObservableConvertibleType>(_ second: O) -> Observable<E2>
-        where O.E == E2
+        where O.Element == E2
     {
         return self
             .filter { _ in false }

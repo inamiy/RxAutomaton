@@ -33,12 +33,12 @@ class EffectMappingLatestSpec: QuickSpec
                 /// Sends `.loginOK` after delay, simulating async work during `.loggingIn`.
                 let loginOKProducer =
                     Observable.just(AuthInput.loginOK)
-                        .delay(1, onScheduler: testScheduler)
+                    .delay(.seconds(1), onScheduler: testScheduler)
 
                 /// Sends `.logoutOK` after delay, simulating async work during `.loggingOut`.
                 let logoutOKProducer =
                     Observable.just(AuthInput.logoutOK)
-                        .delay(1, onScheduler: testScheduler)
+                    .delay(.seconds(1), onScheduler: testScheduler)
 
                 let mappings: [Automaton.EffectMapping] = [
                     .login    | .loggedOut  => .loggingIn  | loginOKProducer,

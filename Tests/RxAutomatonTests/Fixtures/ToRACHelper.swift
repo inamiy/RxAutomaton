@@ -12,7 +12,7 @@ import RxSwift
 // R-A-C! R-A-C!
 
 extension ObservableType {
-    func delay(_ time: TimeInterval, onScheduler scheduler: SchedulerType) -> Observable<E> {
+    func delay(_ time: DispatchTimeInterval, onScheduler scheduler: SchedulerType) -> Observable<Element> {
         return self.flatMap { element in
             return Observable<Int>.interval(time, scheduler: scheduler)
                 .map { _ in element }
@@ -23,18 +23,18 @@ extension ObservableType {
 
 extension ObservableType {
     @discardableResult
-    func observeValues(_ next: @escaping (E) -> Void) -> Disposable {
+    func observeValues(_ next: @escaping (Element) -> Void) -> Disposable {
         return self.subscribe(onNext: next)
     }
 
     @discardableResult
-    func observe(_ observer: @escaping (Event<E>) -> Void) -> Disposable {
+    func observe(_ observer: @escaping (Event<Element>) -> Void) -> Disposable {
         return self.subscribe(AnyObserver(eventHandler: observer))
     }
 }
 
 extension ObserverType {
-    func send(next value: E) {
+    func send(next value: Element) {
         self.onNext(value)
     }
 

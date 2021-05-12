@@ -7,6 +7,7 @@
 //
 
 import RxSwift
+import RxRelay
 
 //
 // Terminology:
@@ -32,7 +33,7 @@ public final class Automaton<State, Input>
 
     /// Current state.
     /// - Todo: Use RxProperty https://github.com/inamiy/RxProperty
-    public let state: Variable<State>
+    public let state: BehaviorRelay<State>
 
     private let _replyObserver: AnyObserver<Reply<State, Input>>
 
@@ -62,7 +63,7 @@ public final class Automaton<State, Input>
     ///
     public init(state initialState: State, input inputSignal: Observable<Input>, mapping: @escaping EffectMapping, strategy: FlattenStrategy = .merge)
     {
-        let stateProperty = Variable(initialState)
+        let stateProperty = BehaviorRelay(value: initialState)
         self.state = stateProperty // TODO: AnyProperty(stateProperty)
 
         let p = PublishSubject<Reply<State, Input>>()
@@ -153,11 +154,11 @@ extension Observable {
 
 // No idea why this is not in RxSwift but RxCocoa...
 extension ObservableType {
-    fileprivate func bindTo(_ variable: Variable<E>) -> Disposable {
+    fileprivate func bindTo(_ variable: BehaviorRelay<Element>) -> Disposable {
         return subscribe { e in
             switch e {
             case let .next(element):
-                variable.value = element
+                variable.accept(element)
             case let .error(error):
                 let error = "Binding error to variable: \(error)"
                 #if DEBUG

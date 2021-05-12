@@ -11,12 +11,12 @@ let package = Package(
             targets: ["RxAutomaton"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/ReactiveX/RxSwift.git", from: "5.0.0"),
+        .package(url: "https://github.com/ReactiveX/RxSwift.git", from: "6.2.0"),
     ],
     targets: [
         .target(
             name: "RxAutomaton",
-            dependencies: ["RxSwift", "RxCocoa"],
+            dependencies: ["RxSwift", "RxCocoa", "RxRelay"],
             path: "Sources"),
     ]
 )
@@ -31,8 +31,8 @@ if ProcessInfo.processInfo.environment.keys.contains("RXAUTOMATON_SPM_TEST") {
 
     package.dependencies.append(
         contentsOf: [
-            .package(url: "https://github.com/Quick/Quick.git", from: "2.1.0"),
-            .package(url: "https://github.com/Quick/Nimble.git", from: "8.0.0"),
+            .package(url: "https://github.com/Quick/Quick.git", from: "4.0.0"),
+            .package(url: "https://github.com/Quick/Nimble.git", from: "9.2.0"),
         ]
     )
 }
