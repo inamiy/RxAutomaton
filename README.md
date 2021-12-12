@@ -1,3 +1,5 @@
+## NOTE: This repository has been discontinued in favor of [Actomaton](https://github.com/inamiy/Actomaton).
+
 # RxAutomaton
 
 [RxSwift](https://github.com/ReactiveX/RxSwift) port of [ReactiveAutomaton](https://github.com/inamiy/ReactiveAutomaton) (State Machine).
