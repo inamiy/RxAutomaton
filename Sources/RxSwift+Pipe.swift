@@ -11,8 +11,8 @@ import RxSwift
 extension ObservableType {
 
     /// From ReactiveCocoa.
-    public static func pipe() -> (Observable<E>, AnyObserver<E>) {
-        let p = PublishSubject<E>()
+    public static func pipe() -> (Observable<Element>, AnyObserver<Element>) {
+        let p = PublishSubject<Element>()
         return (p.asObservable(), AnyObserver(eventHandler: p.asObserver().on))
     }
 
